@@ -1,0 +1,5 @@
+# Ignore raw dataset
+AI/dataset/
+
+# Allow zipped dataset
+AI/dataset.zip
