@@ -1,5 +1,8 @@
 # Ignore raw dataset
 AI/dataset/
 
-# Allow zipped dataset
+# Ignore zipped dataset
 AI/dataset.zip
+
+#Ignore test
+runs/detect/
