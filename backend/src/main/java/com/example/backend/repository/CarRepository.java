@@ -10,4 +10,5 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     boolean existsByLicensePlate(String licensePlate);
     // Tìm xe theo userId
     List<Car> findByOwner_Id(Long userId);
+    Car findByLicensePlate(String licensePlate);
 }

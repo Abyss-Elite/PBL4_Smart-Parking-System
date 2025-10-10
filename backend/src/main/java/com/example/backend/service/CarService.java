@@ -22,4 +22,7 @@ public class CarService {
     public List<Car> getCarsByUserId(Long userId){
         return carRepository.findByOwner_Id(userId);
     }
+    public Car getCarsByLicensePlateNumber(String plate){
+        return carRepository.findByLicensePlate(plate);
+    }
 }
