@@ -58,6 +58,49 @@ def send_plate_to_backend(plate):
         print("❌ Exception khi gửi plate:", e)
 
 
+@app.route("/test_local", methods=["GET"])
+def test_local():
+    """Test AI với ảnh có sẵn trong thư mục image_test"""
+    local_path = "AI/image_test/image2.jpg"  # ← đường dẫn ảnh test
+    img = cv2.imread(local_path)
+    if img is None:
+        return jsonify({"error": "Không tìm thấy ảnh test"}), 400
+
+    timestamp = int(time.time())
+    print(f"🧠 Testing local image: {local_path}")
+
+    results = model(img)
+    all_ocr_texts = []
+
+    for r in results:
+        for box in r.boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            crop = img[y1:y2, x1:x2]
+
+            gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+            gray = cv2.resize(gray, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+            _, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+            debug_path = f"AI/crop_debug/debug_{timestamp}_{x1}_{y1}.jpg"
+            cv2.imwrite(debug_path, gray)
+
+            ocr_results = reader.readtext(gray, detail=0, allowlist="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.")
+            if ocr_results:
+                box_text = "".join(ocr_results)
+                all_ocr_texts.append(box_text)
+
+    combined_text = ".".join(all_ocr_texts) if all_ocr_texts else ""
+    plate_text = normalize_plate(combined_text)
+
+    if plate_text:
+        print("✅ Biển số:", plate_text)
+        send_plate_to_backend(plate_text)
+        return jsonify({"plate": plate_text})
+    else:
+        plate_text = "123456"
+        send_plate_to_backend(plate_text)
+        return jsonify({"error": plate_text}), 400
+
 @app.route("/upload", methods=["POST"])
 def detect_plate():
     file = request.files.get("file")
