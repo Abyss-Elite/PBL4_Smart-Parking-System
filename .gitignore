@@ -6,3 +6,9 @@ AI/dataset.zip
 
 #Ignore test
 runs/detect/
+
+AI/crop_debug
+
+AI/image_test
+
+AI/receive
