@@ -1,6 +1,7 @@
 package com.example.backend.service;
 import com.example.backend.model.User;
 import com.example.backend.model.Car;
+import com.example.backend.model.Role;
 import com.example.backend.repository.CarRepository;
 import com.example.backend.repository.UserRepository;
 
@@ -21,23 +22,30 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User register(String username, String password, String role, String email){
+    public User register(String username, String password, Role role, String email, String phoneNumber, String status, Boolean isDelete){
         if(userRepository.findByUsername(username).isPresent()){
             throw new RuntimeException("Tên đăng nhập đã tồn tại.");
         }
         if(userRepository.findByEmail(email).isPresent()){
             throw new RuntimeException("Email đã tồn tại");
         }
+        if(userRepository.findByPhoneNumber(phoneNumber).isPresent()){
+            throw new RuntimeException("Số điện thoại đã được đăng ký.");
+        }
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
         user.setEmail(email);
+        user.setStatus(status);
+        user.setDelete(isDelete);
+        user.setPhoneNumber(phoneNumber);
+
         return userRepository.save(user);
     }
 
-    public boolean login(String username, String password){
-        Optional<User> userOpt = userRepository.findByUsername(username);
+    public boolean login(String email, String password){
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if(userOpt.isPresent()){
             User user = userOpt.get();
             return passwordEncoder.matches(password, user.getPassword());
@@ -65,6 +73,7 @@ public class UserService {
         return userRepository.findAll();
     }
     public User createUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
     public User getUser(Long id){
@@ -72,14 +81,37 @@ public class UserService {
             .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng."));
     }
 
-    public User updateUser(Long id, User userDetails){
+    public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng."));
 
-        user.setEmail(userDetails.getEmail());
-        user.setUsername(userDetails.getUsername());
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        }
+
+        if (userDetails.getEmail() != null && !userDetails.getEmail().isBlank()) {
+            user.setEmail(userDetails.getEmail());
+        }
+
+        if (userDetails.getUsername() != null && !userDetails.getUsername().isBlank()) {
+            user.setUsername(userDetails.getUsername());
+        }
+
+        if (userDetails.getPhoneNumber() != null && !userDetails.getPhoneNumber().isBlank()) {
+            user.setPhoneNumber(userDetails.getPhoneNumber());
+        }
+
+        if (userDetails.getAvaUrl() != null && !userDetails.getAvaUrl().isBlank()) {
+            user.setAvaUrl(userDetails.getAvaUrl());
+        }
+
+        if (userDetails.getRole() != null && userDetails.getRole().getId() != null) {
+            user.setRole(userDetails.getRole());
+        }
+
         return userRepository.save(user);
     }
+
 
 
     public void deleteUser(Long id){

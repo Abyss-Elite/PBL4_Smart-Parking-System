@@ -23,6 +23,10 @@ public class CarService {
         return carRepository.findByOwner_Id(userId);
     }
     public Car getCarsByLicensePlateNumber(String plate){
+        // http://192.168.1.124/capture
+        // Car car = carRepository.findByLicensePlate(plate);
+        // String captureUrl = ""
+        // if(car == null) 
         return carRepository.findByLicensePlate(plate);
     }
 }
