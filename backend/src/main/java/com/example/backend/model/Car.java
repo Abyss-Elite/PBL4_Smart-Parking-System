@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "cars")
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,62 +15,58 @@ public class Car {
     @Column(nullable=false, unique = true)
     private String licensePlate;
 
+    @Column(nullable=true)
+    private String description;
+
+    @Column(nullable=false)
+    private Boolean isOut = false; 
+
+    @Column(nullable=true)
+    private String imageUrl;
+
+    @Column(nullable=false)
+    private String status = "ACTIVE"; 
+
+    @Column(nullable=false)
     private LocalDate registrationDate;
 
-    private LocalDateTime lastInTime;
-   
-    private LocalDateTime lastOutTime;
+    @Column(nullable = false)
+    private Boolean isDelete = false; 
 
+    @Column(nullable = true)
+    private LocalDateTime lastTime; 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    // --- Getter và Setter thủ công ---
-    public Long getId() {
-        return id;
-    }
+    // ===== Getter & Setter =====
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getLicensePlate() { return licensePlate; }
+    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+    public Boolean getIsOut() { return isOut; }
+    public void setIsOut(Boolean isOut) { this.isOut = isOut; }
 
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public LocalDateTime getLastInTime() {
-        return lastInTime;
-    }
+    public LocalDate getRegistrationDate() { return registrationDate; }
+    public void setRegistrationDate(LocalDate registrationDate) { this.registrationDate = registrationDate; }
 
-    public void setLastInTime(LocalDateTime lastInTime) {
-        this.lastInTime = lastInTime;
-    }
+    public Boolean getIsDelete() { return isDelete; }
+    public void setIsDelete(Boolean isDelete) { this.isDelete = isDelete; }
 
-    public LocalDateTime getLastOutTime() {
-        return lastOutTime;
-    }
+    public LocalDateTime getLastTime() { return lastTime; }
+    public void setLastTime(LocalDateTime lastTime) { this.lastTime = lastTime; }
 
-    public void setLastOutTime(LocalDateTime lastOutTime) {
-        this.lastOutTime = lastOutTime;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 }
