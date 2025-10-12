@@ -33,8 +33,9 @@ public class Car {
     @Column(nullable = false)
     private Boolean isDelete = false; 
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalDateTime lastTime; 
+    
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;

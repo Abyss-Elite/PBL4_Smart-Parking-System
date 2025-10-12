@@ -4,6 +4,8 @@ import com.example.backend.model.Car;
 import com.example.backend.model.Role;
 import com.example.backend.repository.CarRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.validator.UserValidator;
+import com.example.backend.repository.RoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,23 +17,23 @@ import java.util.List;
 public class UserService {
     @Autowired
     private CarRepository carRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final UserValidator userValidator;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserValidator userValidator){
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userValidator = userValidator;
     }
 
     public User register(String username, String password, Role role, String email, String phoneNumber, String status, Boolean isDelete){
-        if(userRepository.findByUsername(username).isPresent()){
-            throw new RuntimeException("Tên đăng nhập đã tồn tại.");
-        }
-        if(userRepository.findByEmail(email).isPresent()){
-            throw new RuntimeException("Email đã tồn tại");
-        }
-        if(userRepository.findByPhoneNumber(phoneNumber).isPresent()){
-            throw new RuntimeException("Số điện thoại đã được đăng ký.");
-        }
+        userValidator.validateEmail(email, null);
+        userValidator.validatePassword(password);
+        userValidator.validatePhoneNumber(phoneNumber, null);
+        userValidator.validateUsername(username, null);
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
@@ -73,7 +75,18 @@ public class UserService {
         return userRepository.findAll();
     }
     public User createUser(User user){
+        userValidator.validateEmail(user.getEmail(), null);
+        userValidator.validatePassword(user.getPassword());
+        userValidator.validatePhoneNumber(user.getPhoneNumber(), null);
+        userValidator.validateUsername(user.getUsername(), null);
+        if (user.getRole() != null && user.getRole().getId() != null) {
+        Role role = roleRepository.findById(user.getRole().getId())
+                        .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
+        user.setRole(role); 
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.isDelete() == null) user.setDelete(false); 
+        if (user.getStatus() == null) user.setStatus("ACTIVE");
         return userRepository.save(user);
     }
     public User getUser(Long id){
@@ -82,39 +95,48 @@ public class UserService {
     }
 
     public User updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng."));
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng."));
 
-        if (userDetails.getPassword() != null && !userDetails.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-        }
-
-        if (userDetails.getEmail() != null && !userDetails.getEmail().isBlank()) {
-            user.setEmail(userDetails.getEmail());
-        }
-
-        if (userDetails.getUsername() != null && !userDetails.getUsername().isBlank()) {
-            user.setUsername(userDetails.getUsername());
-        }
-
-        if (userDetails.getPhoneNumber() != null && !userDetails.getPhoneNumber().isBlank()) {
-            user.setPhoneNumber(userDetails.getPhoneNumber());
-        }
-
-        if (userDetails.getAvaUrl() != null && !userDetails.getAvaUrl().isBlank()) {
-            user.setAvaUrl(userDetails.getAvaUrl());
-        }
-
-        if (userDetails.getRole() != null && userDetails.getRole().getId() != null) {
-            user.setRole(userDetails.getRole());
-        }
-
-        return userRepository.save(user);
+   
+    if (userDetails.getUsername() != null && !userDetails.getUsername().isBlank()) {
+        userValidator.validateUsername(userDetails.getUsername(), id);
+        user.setUsername(userDetails.getUsername());
     }
+
+    if (userDetails.getEmail() != null && !userDetails.getEmail().isBlank()) {
+        userValidator.validateEmail(userDetails.getEmail(), id);
+        user.setEmail(userDetails.getEmail());
+    }
+
+    if (userDetails.getPhoneNumber() != null && !userDetails.getPhoneNumber().isBlank()) {
+        userValidator.validatePhoneNumber(userDetails.getPhoneNumber(), id);
+        user.setPhoneNumber(userDetails.getPhoneNumber());
+    }
+
+    if (userDetails.getPassword() != null && !userDetails.getPassword().isBlank()) {
+        userValidator.validatePassword(userDetails.getPassword());
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+    }
+
+    // Update các field khác
+    if (userDetails.getAvaUrl() != null) user.setAvaUrl(userDetails.getAvaUrl());
+    if (userDetails.getRole() != null && userDetails.getRole().getId() != null) {
+        Role role = roleRepository.findById(userDetails.getRole().getId())
+                .orElseThrow(() -> new RuntimeException("Role không tồn tại"));
+        user.setRole(role);
+    }
+    if (userDetails.getStatus() != null) user.setStatus(userDetails.getStatus());
+    if (userDetails.isDelete() != null) user.setDelete(userDetails.isDelete());
+
+    return userRepository.save(user);
+}
+
 
 
 
     public void deleteUser(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại."));
         userRepository.deleteById(id);
     }
 

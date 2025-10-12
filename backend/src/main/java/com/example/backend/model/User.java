@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-  
+
     @Column(unique = true, nullable = false)
     @NotBlank(message = "Tên đăng nhập không được để trống")
     private String username;
@@ -27,10 +27,7 @@ public class User {
     @Column(nullable = false)
     @NotBlank(message = "Mật khẩu không được để trống")
     @Size(min = 8, message = "Mật khẩu phải ít nhất 8 ký tự")
-    @Pattern(
-        regexp = ".*[!@#$%^&*(),.?\":{}|<>].*",
-        message = "Mật khẩu phải ít nhất 1 ký tự đặc biệt"
-    )
+    @Pattern(regexp = ".*[!@#$%^&*(),.?\":{}|<>].*", message = "Mật khẩu phải ít nhất 1 ký tự đặc biệt")
     private String password;
 
     @NotBlank(message = "Email không được để trống")
@@ -45,10 +42,10 @@ public class User {
     private String status;
 
     @Column(nullable = false)
-    private boolean isDelete;
+    private Boolean isDelete = false;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -101,11 +98,21 @@ public class User {
         return avaUrl;
     }
 
-     public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public boolean isDelete() { return isDelete; }
-    public void setDelete(boolean delete) { isDelete = delete; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
+    }
 
     public void setAvaUrl(String avaUrl) {
         this.avaUrl = avaUrl;
@@ -119,6 +126,11 @@ public class User {
         this.cars = cars;
     }
 
-    public Role getRole() { return role; }
-    public void setRole(Role roles) { this.role = roles; }
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role roles) {
+        this.role = roles;
+    }
 }

@@ -108,7 +108,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/getAllUsers")
+    @GetMapping("")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
@@ -125,7 +125,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         return userService.updateUser(id, userDetails);
