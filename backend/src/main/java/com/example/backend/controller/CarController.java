@@ -76,12 +76,18 @@ public class CarController {
         return carService.getCarsByUserId(userId);
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/LicensePlateNumber")
     public Car getLicensePlateNumber(@RequestBody LicensePlateRequest licensePlate){
         String plate = licensePlate.getPlate();
         if(plate == null || plate.isEmpty()) throw new RuntimeException("Fail to get license plate number");
-        Car car = carService.getCarsByLicensePlateNumber(plate);
+
+        // String captureUrl = "http://192.168.1.124/capture";
+        String captureUrl = "http://localhost:8083/mockCapture";
+        Car car = carService.getCarsByLicensePlateNumber(plate, captureUrl);
         if(car == null) throw new RuntimeException("Car not found with plate: " + plate);
         return car;
     }
+
+
 }
