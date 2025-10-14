@@ -7,13 +7,17 @@ import RevenueChart from "@/components/adminPage/ui/RevenueChart";
 import RecentVehicleTable from "@/components/adminPage/ui/RecentVehicleTable";
 import ExpiringTicketList from "@/components/adminPage/ui/ExpiringTicketList";
 import ItemCard from "@/components/adminPage/ui/ItemCard";
+import PATH from "@/routes/PATH";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [working, setWorking] = useState(false);
 
   const handleWork = () => {
     setWorking(true);
     setTimeout(() => setWorking(false), 2000);
+    router.push(PATH.DASHBOARD.PARKING_LOT_MANAGEMENT.Gate_Surveillance);
   };
   const usagePercent = 85;
 
@@ -37,11 +41,11 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Trang Admin</h1>
         <Button onClick={handleWork} className="bg-green-600 hover:bg-green-700">
-          {working ? "Đang xử lý..." : "Làm việc"}
+          {working ? "Đang xử lý..." : "Giám sát"}
         </Button>
       </div>
 
