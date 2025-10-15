@@ -18,7 +18,7 @@ export function SideBarContent() {
     },
     {
       label: "Account Management",
-      path: PATH.DASHBOARD.ACCOUNT_MANAGEMENT,
+      path: PATH.DASHBOARD.ACCOUNT_MANAGEMENT.HOME,
       icon: <IconAccountManagement />,
     },
     {
