@@ -3,7 +3,10 @@ const PATH = {
   REGISTER: "/register",
   DASHBOARD: {
     ADMIN_HOME: "/dashboard/admin_home",
-    ACCOUNT_MANAGEMENT: "/dashboard/account_management",
+    ACCOUNT_MANAGEMENT: {
+      HOME: "/dashboard/account_management",
+      VEHICLE: (id) => `/dashboard/account_management/${id}/vehicles`,
+    },
     VEHICLE_MANAGEMENT: "/dashboard/vehicle_management",
     PARKING_LOT_MANAGEMENT: {
       HOME: "/dashboard/parking_lot_management",
