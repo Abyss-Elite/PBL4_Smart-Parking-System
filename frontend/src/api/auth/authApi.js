@@ -1,8 +1,8 @@
 import api from "@/lib/axiosInstance";
 
 const authAPI = {
-  login: ({ username, password }) => {
-    return api.post("/api/user/login", { username, password });
+  login: ({ email, password }) => {
+    return api.post("/api/user/login", { email, password });
   },
   register: ({ username, email, password, role = "User" }) => {
     return api.post("/api/user/register", { username, email, password, role });

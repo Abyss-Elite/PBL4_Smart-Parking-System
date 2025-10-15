@@ -26,7 +26,7 @@ function SideBar({ className }) {
     <div
       className={`${className} flex h-screen flex-col justify-between border-r-1 border-[#E3E8EF] text-sm`}
     >
-      <div className="flex flex-col items-center gap-6 pt-6">
+      <div className="flex flex-col gap-6 pt-6 items-center">
         <div className="px-6 py-1">
           <Image src={ImageLogo} alt="Logo" className="mr-4 rounded-lg" width={100} height={50} />
         </div>
