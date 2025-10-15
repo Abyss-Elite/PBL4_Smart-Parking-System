@@ -8,23 +8,25 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import authAPI from "@/api/auth/authApi";
 import PATH from "@/routes/PATH";
+import { setToken } from "@/utils/tokenStorage";
 
 export default function LoginForm({ onShowReset }) {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
     try {
-      const res = await authAPI.login({ username, password });
+      const res = await authAPI.login({ email, password });
 
       const data = res.data;
       localStorage.setItem("username", data.username);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.id);
+      setToken({ accessToken: data.accessToken });
 
-      if (data.role === "ADMIN") router.push("/adminHome");
+      if (data.role === "ADMIN") router.push(PATH.DASHBOARD.ADMIN_HOME);
       else router.push("/home");
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Sai tài khoản hoặc mật khẩu!");
@@ -38,9 +40,9 @@ export default function LoginForm({ onShowReset }) {
       </CardHeader>
       <CardContent className="space-y-4">
         <Input
-          placeholder="Tên đăng nhập"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email đăng nhập"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           placeholder="Mật khẩu"

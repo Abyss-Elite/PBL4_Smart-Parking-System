@@ -8,7 +8,10 @@ const PATH = {
       VEHICLE: (id) => `/dashboard/account_management/${id}/vehicles`,
     },
     VEHICLE_MANAGEMENT: "/dashboard/vehicle_management",
-    PARKING_LOT_MANAGEMENT: "/dashboard/parking_lot_management",
+    PARKING_LOT_MANAGEMENT: {
+      HOME: "/dashboard/parking_lot_management",
+      Gate_Surveillance: "/dashboard/parking_lot_management/Gate_surveillance",
+    },
     SECURITY_MANAGEMENT: "/dashboard/security_management",
     REPORTS: "/dashboard/reports",
     SETTING: "/dashboard/setting",
