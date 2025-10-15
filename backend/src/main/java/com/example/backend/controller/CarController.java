@@ -22,7 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("/api/car")
 // @CrossOrigin(origins = "*")
-@CrossOrigin(origins = "http://192.168.1.12:5000")
+@CrossOrigin(origins = "http://192.168.1.63:5000")
 
 
 public class CarController {
@@ -82,8 +82,8 @@ public class CarController {
         String plate = licensePlate.getPlate();
         if(plate == null || plate.isEmpty()) throw new RuntimeException("Fail to get license plate number");
 
-        // String captureUrl = "http://192.168.1.124/capture";
-        String captureUrl = "http://localhost:8083/mockCapture";
+        String captureUrl = "http://192.168.1.5/check-plate";
+        // String captureUrl = "http://localhost:8083/mockCapture";
         Car car = carService.getCarsByLicensePlateNumber(plate, captureUrl);
         if(car == null) throw new RuntimeException("Car not found with plate: " + plate);
         return car;

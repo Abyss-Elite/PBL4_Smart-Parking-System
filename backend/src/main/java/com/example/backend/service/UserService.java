@@ -47,9 +47,12 @@ public class UserService {
     }
 
     public boolean login(String email, String password){
+        System.out.println(password);
         Optional<User> userOpt = userRepository.findByEmail(email);
         if(userOpt.isPresent()){
             User user = userOpt.get();
+             System.out.println("🧩 Email: " + user.getEmail());
+        System.out.println("🔐 Password: " + user.getPassword());
             return passwordEncoder.matches(password, user.getPassword());
         }
         return false;
