@@ -1,20 +1,26 @@
 "use client";
 import VehicleRecognitionResult from "@/components/parking/VehicleRecognitionResult";
+import carAPI from "@/api/car/carAPI";
+import { useEffect, useState } from "react";
 
 export default function GateSurveillance() {
-  const mockData = {
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Car.jpg",
-    time: "2025-10-14 21:35:27",
-    licensePlate: "43A-12345",
-    status: "Đã xác nhận",
-    direction: "in",
-  };
+  const [currentMonitoredCar, setCurrentMonitoredCar] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await carAPI.getCurrentMonitoredCar();
+      setCurrentMonitoredCar(res.data);
+    };
+    fetchData();
+  }, []);
+
+  const linkVideo = "http://192.168.43.68:5000/video_feed";
 
   const handleRetake = () => alert("Chụp lại ảnh xe!");
 
   return (
     <div className="p-6">
-      <VehicleRecognitionResult data={mockData} onRetake={handleRetake} />
+      <VehicleRecognitionResult data={currentMonitoredCar} onRetake={handleRetake} linkVideo={linkVideo} />
     </div>
   );
 }

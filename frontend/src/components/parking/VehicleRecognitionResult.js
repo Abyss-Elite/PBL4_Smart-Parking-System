@@ -4,28 +4,40 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ZoomIn, Camera, LogIn, LogOut, Clock, Car, ClipboardCheck } from "lucide-react";
-import Image from "next/image";
+import { formatDateTime } from "@/utils/formatDateTime";
 
-export default function VehicleRecognitionResult({ data, onRetake }) {
+export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) {
   const [isZoomed, setIsZoomed] = useState(false);
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card className="flex flex-col items-center justify-center shadow-xl">
         <CardHeader>
-          <CardTitle className="text-center text-lg font-bold">📷 Ảnh xe</CardTitle>
+          <CardTitle className="text-center text-lg font-bold">Ảnh xe</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           <div className="relative overflow-hidden rounded-lg border shadow-md">
-            <Image
-              src={data?.imageUrl || "/placeholder-car.png"}
-              alt="Vehicle"
-              width={420}
-              height={280}
-              className={`rounded-lg object-cover transition-transform duration-300 ${
-                isZoomed ? "scale-110" : "scale-100"
-              }`}
-            />
+            {linkVideo ? (
+              /* eslint-disable @next/next/no-img-element */
+              <img
+                src="http://192.168.43.86:5000/video_feed"
+                alt="Live Feed"
+                width={420}
+                height={280}
+                className={`rounded-lg border border-gray-200 object-cover shadow-sm transition-transform duration-300 ${
+                  isZoomed ? "scale-110" : "scale-100"
+                }`}
+              />
+            ) : (
+              <img
+                src="/placeholder-car.png"
+                alt="No Camera"
+                width={420}
+                height={280}
+                className="rounded-lg border border-gray-200 object-cover shadow-sm"
+              />
+              /* eslint-enable @next/next/no-img-element */
+            )}
           </div>
 
           <div className="mt-4 flex space-x-3">
@@ -58,14 +70,14 @@ export default function VehicleRecognitionResult({ data, onRetake }) {
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-500" />
             <span className="font-semibold">Thời gian:</span>
-            <span>{data?.time || "—"}</span>
+            <span>{formatDateTime(data?.dateTime) || "—"}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Car className="h-5 w-5 text-blue-600" />
             <span className="font-semibold">Biển số:</span>
             <span className="text-lg font-bold text-blue-700">
-              {data?.licensePlate || "Không xác định"}
+              {data?.currentPlate || "Không xác định"}
             </span>
           </div>
 
