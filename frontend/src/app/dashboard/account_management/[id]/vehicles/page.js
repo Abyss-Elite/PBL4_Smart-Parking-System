@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import VehicleCard from "@/components/vehicle/VehicleCard";
 import VehicleFormDialog from "@/components/vehicle/VehicleFormDialog";
+import carAPI from "@/api/car/carAPI";
 
 const initialVehicles = {
   1: [
@@ -62,7 +63,13 @@ export default function VehiclePage() {
     // fetch(`http://localhost:8083/api/car/user/${userId}`)
     //   .then((res) => res.json())
     //   .then((data) => setVehicles(data));
-    setVehicles(initialVehicles[userId] || []);
+    // setVehicles(initialVehicles[userId] || []);
+    const fetchData = async () => {
+      const res = await carAPI.getCarByUserId(userId);
+      setVehicles(res.data);
+      console.log("data:", res.data);
+    }
+    fetchData();
   }, [userId]);
 
   // --- Thêm xe mới ---

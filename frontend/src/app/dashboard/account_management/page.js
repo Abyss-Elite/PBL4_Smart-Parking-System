@@ -68,9 +68,10 @@ export default function UserManagementPage() {
 
   const fetchUsers = async () => {
     try {
-      // const res = await userAPI.getUsers();
-      // setUsers(res.data);
-      setUsers(initialUsers);
+      const res = await userAPI.getUsers();
+      setUsers(res.data);
+      console.log("Kết quả API:", res.data);
+      // setUsers(initialUsers);
     } catch (error) {
       console.error("Lỗi khi lấy user:", error);
     }

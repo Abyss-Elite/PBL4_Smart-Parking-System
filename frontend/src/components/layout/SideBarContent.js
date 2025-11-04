@@ -28,7 +28,7 @@ export function SideBarContent() {
     },
     {
       label: "Parking Lot Management",
-      path: PATH.DASHBOARD.PARKING_LOT_MANAGEMENT,
+      path: PATH.DASHBOARD.PARKING_LOT_MANAGEMENT.HOME,
       icon: <IconParkingLotManagement />,
     },
     {

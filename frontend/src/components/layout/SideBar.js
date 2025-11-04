@@ -12,6 +12,7 @@ function SideBar({ className }) {
   useEffect(() => {
     const fetchDataUser = async () => {
       try {
+        const userId = localStorage
         const res = await userAPI.getUser();
         const data = res.data.result;
         setDataUser(data);

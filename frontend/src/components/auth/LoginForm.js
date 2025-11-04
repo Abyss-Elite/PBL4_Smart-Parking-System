@@ -21,13 +21,23 @@ export default function LoginForm({ onShowReset }) {
       const res = await authAPI.login({ email, password });
 
       const data = res.data;
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.id);
-      setToken({ accessToken: data.accessToken });
+      localStorage.setItem("username", res.data.username);
+      localStorage.setItem("role", res.data.role);
+      localStorage.setItem("userId", res.data.id);
+      console.log("accessToken:", res.data.accessToken);
+      setToken({ accessToken: res.data.accessToken });
+      localStorage.setItem("accessToken", res.data.accessToken);
 
-      if (data.role === "ADMIN") router.push(PATH.DASHBOARD.ADMIN_HOME);
-      else router.push("/home");
+      console.log("toi day")
+
+      if (data.role === "ADMIN"){
+        console.log("qua tai");
+         router.push(PATH.DASHBOARD.ADMIN_HOME);
+      }
+      else {
+        console.log("o day");
+        router.push("/home");
+      }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Sai tài khoản hoặc mật khẩu!");
     }
