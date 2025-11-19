@@ -13,7 +13,6 @@ export default function ParkingPage() {
   ];
 
   const handleSearch = (quantity) => {
-    // API search → bạn thay bằng fetch
     setResults(sampleData);
   };
 

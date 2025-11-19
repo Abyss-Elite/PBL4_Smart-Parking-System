@@ -1,6 +1,6 @@
 "use client";
 
-import carAPI from "@/api/car/carAPI";
+import { carAPI } from "@/api/car/carAPI";
 import WeekSelector from "@/components/common/WeekSelector";
 import BookingDetail from "@/components/parking/BookingDetail";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -154,7 +154,7 @@ export default function ReservationDetailManagementPage({
       const year = date.getFullYear();
 
       const formattedDay = `${year}-${month}-${day}`;
-      const res = await carAPI.getReservatedSpot(numericId, formattedDay);
+      // const res = await carAPI.getReservatedSpot(numericId, formattedDay);
       // setSpot(res.data);
       setSpot(data1);
     }

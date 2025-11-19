@@ -12,6 +12,7 @@ const PATH = {
       RESERVATION: {
         HOME: "/dashboard/parking_lot_management/reservation",
         DETAIL: (id) => `/dashboard/parking_lot_management/reservation/${id}`,
+        PAYMENT: "/dashboard/parking_lot_management/reservation/payment",
       },
     },
     SCHEDULE: "/dashboard/schedule",

@@ -6,7 +6,7 @@ import ParkingSpot from "@/components/parking/ParkingSpot";
 import { useRouter } from "next/navigation";
 import PATH from "@/routes/PATH";
 import React, { useEffect, useState } from "react";
-import carAPI from "@/api/car/carAPI";
+import { carAPI } from "@/api/car/carAPI";
 
 export default function ReservationManagementPage() {
   const data = [
