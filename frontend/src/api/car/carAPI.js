@@ -16,5 +16,16 @@ export const carAPI = {
   getNextReservedCars: () => {
     return api.get("/bookings/nextReservedCars");
   },
+  getReservatedSpot: (id, startOfWeek) => {
+    return api.get(`/parkingSpot/${id}/bookings`, {
+      params: {startOfWeek},
+    });
+  },
+  getBookingDetail: (bookingId)=>{
+    return api.get(`/parkingLot/${bookingId}`)
+  },
+  getAllSpotReservation: ()=>{
+    return api.get("/parkingLot/2/spots");
+  }
 };
 
