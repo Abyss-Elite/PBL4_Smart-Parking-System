@@ -9,6 +9,10 @@ const PATH = {
     PARKING_LOT_MANAGEMENT: {
       HOME: "/dashboard/parking_lot_management",
       Gate_Surveillance: "/dashboard/parking_lot_management/Gate_surveillance",
+      RESERVATION: {
+        HOME: "/dashboard/parking_lot_management/reservation",
+        DETAIL: (id) => `/dashboard/parking_lot_management/reservation/${id}`,
+      },
     },
     SCHEDULE: "/dashboard/schedule",
     SETTING: "/dashboard/setting",
