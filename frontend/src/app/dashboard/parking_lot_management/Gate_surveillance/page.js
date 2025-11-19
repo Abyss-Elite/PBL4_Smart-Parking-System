@@ -1,6 +1,6 @@
 "use client";
-import VehicleRecognitionResult from "@/components/parking/VehicleRecognitionResult";
-import carAPI from "@/api/car/carAPI";
+import VehicleRecognitionResult from "@/components/parking/generalParking/VehicleRecognitionResult";
+import { carAPI } from "@/api/car/carAPI";
 import { useEffect, useState } from "react";
 
 export default function GateSurveillance() {
@@ -14,7 +14,7 @@ export default function GateSurveillance() {
     fetchData();
   }, []);
 
-  const linkVideo = "http://192.168.43.68:5000/video_feed";
+  const linkVideo = "http://192.168.43.111:5000/video_feed";
 
   const handleRetake = () => alert("Chụp lại ảnh xe!");
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { CONFIG } from "./config";
 import { getAccessToken, getRefreshToken, setToken, removeToken } from "@/utils/tokenStorage";
+import PATH from "@/routes/PATH";
 
 const api = axios.create({
   baseURL: CONFIG.API_BASE_URL + "/",
@@ -33,8 +34,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         console.log("Refresh token expired - redirecting to login");
-        removeToken();
-        window.location.href = PATH.LOGIN;
+        // removeToken();
+        // window.location.href = PATH.LOGIN;
         return Promise.reject(refreshError);
       }
     }

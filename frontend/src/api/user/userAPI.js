@@ -1,6 +1,6 @@
 import api from "@/lib/axiosInstance";
 
-const userAPI = {
+export const userAPI = {
   getUser: (userId) => {
     return api.get(`user/${userId}`);
   },
@@ -20,5 +20,3 @@ const userAPI = {
     return api.delete(`user/${id}`);
   },
 };
-
-export default userAPI;

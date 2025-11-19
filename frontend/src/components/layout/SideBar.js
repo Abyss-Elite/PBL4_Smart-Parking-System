@@ -2,7 +2,7 @@ import Image from "next/image";
 import { SideBarContent } from "./SideBarContent";
 import { SideBarFooter } from "./SideBarFooter";
 import { useEffect, useState } from "react";
-import userAPI from "@/api/user/userAPI";
+import { userAPI } from "@/api/user/userAPI";
 
 function SideBar({ className }) {
   const ImageLogo =
@@ -12,9 +12,8 @@ function SideBar({ className }) {
   useEffect(() => {
     const fetchDataUser = async () => {
       try {
-        const userId = localStorage
-        const res = await userAPI.getUser();
-        const data = res.data.result;
+        const res = await userAPI.getUser(localStorage.getItem("userId"));
+        const data = res.data;
         setDataUser(data);
       } catch (err) {
         console.log("Not fetch data: ", err);
@@ -27,7 +26,7 @@ function SideBar({ className }) {
     <div
       className={`${className} flex h-screen flex-col justify-between border-r-1 border-[#E3E8EF] text-sm`}
     >
-      <div className="flex flex-col gap-6 pt-6 items-center">
+      <div className="flex flex-col items-center gap-6 pt-6">
         <div className="px-6 py-1">
           <Image src={ImageLogo} alt="Logo" className="mr-4 rounded-lg" width={100} height={50} />
         </div>

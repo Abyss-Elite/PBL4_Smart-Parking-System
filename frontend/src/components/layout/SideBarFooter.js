@@ -5,7 +5,7 @@ import PATH from "@/routes/PATH";
 import { IconSetting } from "../ui/icon/IconSetting";
 
 export function SideBarFooter({ data }) {
-  const { name, jobTitle } = data;
+  const { username } = data;
   const userImage = "https://photo.znews.vn/w660/Uploaded/mdf_eioxrd/2021_07_06/2.jpg";
   const pathname = usePathname();
 
@@ -33,8 +33,8 @@ export function SideBarFooter({ data }) {
       <div className="flex gap-4 border-t-1 border-[#E3E8EF] pt-6 pr-8 pl-2">
         <Image src={userImage} className="rounded-full" width={32} height={32} alt="imageUser" />
         <div className="flex flex-col justify-center">
-          <p className="text-sm font-medium text-[#1F2937]">{name}</p>
-          <p className="text-xs text-[#374151]">{jobTitle}</p>
+          <p className="text-sm font-medium text-[#1F2937]">{username}</p>
+          <p className="text-xs text-[#374151]">{data.email}</p>
         </div>
       </div>
     </div>
