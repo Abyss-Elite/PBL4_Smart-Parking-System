@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatDateTime } from "@/utils/formatDateTime";
 
-export default function RecentVehicleTable({activityList}) {
+export default function RecentVehicleTable({ activityList }) {
   return (
     <Card>
       <CardHeader>
@@ -18,14 +19,14 @@ export default function RecentVehicleTable({activityList}) {
           <tbody>
             {activityList.map((a, i) => (
               <tr key={i} className="border-b last:border-none">
-                <td className="py-2">{a.plate}</td>
-                <td>{a.time}</td>
+                <td className="py-2">{a.licensePlate}</td>
+                <td>{formatDateTime(a.time)}</td>
                 <td
                   className={
-                    a.status === "Vào" ? "font-medium text-green-600" : "font-medium text-red-500"
+                    a.type === "IN" ? "font-medium text-green-600" : "font-medium text-red-500"
                   }
                 >
-                  {a.status}
+                  {a.type === "IN" ? <p>Vào</p> : <p>Ra</p>}
                 </td>
               </tr>
             ))}

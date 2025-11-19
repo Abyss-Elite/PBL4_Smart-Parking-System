@@ -3,17 +3,14 @@ const PATH = {
   REGISTER: "/register",
   DASHBOARD: {
     ADMIN_HOME: "/dashboard/admin_home",
-    ACCOUNT_MANAGEMENT: {
-      HOME: "/dashboard/account_management",
-      VEHICLE: (id) => `/dashboard/account_management/${id}/vehicles`,
-    },
-    VEHICLE_MANAGEMENT: "/dashboard/vehicle_management",
+    ON_DUTY_STAFF_MANAGEMENT: "/dashboard/on_duty_staff_management",
+    ENTRY_AND_EXIT_HISTORY: "/dashboard/entry_and_exit_history",
+    REPORTS_AND_ANALYTICS: "/dashboard/reports_and_analytics",
     PARKING_LOT_MANAGEMENT: {
       HOME: "/dashboard/parking_lot_management",
       Gate_Surveillance: "/dashboard/parking_lot_management/Gate_surveillance",
     },
-    SECURITY_MANAGEMENT: "/dashboard/security_management",
-    REPORTS: "/dashboard/reports",
+    SCHEDULE: "/dashboard/schedule",
     SETTING: "/dashboard/setting",
   },
 };

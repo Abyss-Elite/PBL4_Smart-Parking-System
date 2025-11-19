@@ -17,28 +17,23 @@ export function SideBarContent() {
       icon: <IconHome />,
     },
     {
-      label: "Account Management",
-      path: PATH.DASHBOARD.ACCOUNT_MANAGEMENT.HOME,
-      icon: <IconAccountManagement />,
-    },
-    {
-      label: "Vehicle Management",
-      path: PATH.DASHBOARD.VEHICLE_MANAGEMENT,
-      icon: <IconVehicleManagement />,
-    },
-    {
       label: "Parking Lot Management",
       path: PATH.DASHBOARD.PARKING_LOT_MANAGEMENT.HOME,
       icon: <IconParkingLotManagement />,
     },
     {
-      label: "Security Management",
-      path: PATH.DASHBOARD.SECURITY_MANAGEMENT,
+      label: "On_Duty Staff Management",
+      path: PATH.DASHBOARD.ON_DUTY_STAFF_MANAGEMENT,
+      icon: <IconParkingLotManagement />,
+    },
+    {
+      label: "Entry & Exit History",
+      path: PATH.DASHBOARD.ENTRY_AND_EXIT_HISTORY,
       icon: <IconSecurityManagement />,
     },
     {
-      label: "Reports",
-      path: PATH.DASHBOARD.REPORTS,
+      label: "Reports & Analytics",
+      path: PATH.DASHBOARD.REPORTS_AND_ANALYTICS,
       icon: <IconReport />,
     },
   ];

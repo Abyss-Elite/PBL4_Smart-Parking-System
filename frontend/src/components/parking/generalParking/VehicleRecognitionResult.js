@@ -20,7 +20,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
             {linkVideo ? (
               /* eslint-disable @next/next/no-img-element */
               <img
-                src="http://192.168.43.86:5000/video_feed"
+                src={linkVideo}
                 alt="Live Feed"
                 width={420}
                 height={280}
@@ -70,7 +70,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-500" />
             <span className="font-semibold">Thời gian:</span>
-            <span>{formatDateTime(data?.dateTime) || "—"}</span>
+            <span>{formatDateTime(data?.car?.checkInTime) || "—"}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -82,23 +82,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
           </div>
 
           <div className="flex items-center gap-2">
-            <ClipboardCheck className="h-5 w-5 text-green-600" />
-            <span className="font-semibold">Trạng thái:</span>
-            <span
-              className={`rounded px-2 py-1 font-semibold ${
-                data?.status === "Đã xác nhận"
-                  ? "bg-green-100 text-green-700"
-                  : data?.status === "Đang chờ"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-              }`}
-            >
-              {data?.status || "—"}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {data?.direction === "in" ? (
+            {data?.car?.isOut === false ? (
               <LogIn className="h-5 w-5 text-green-600" />
             ) : (
               <LogOut className="h-5 w-5 text-red-600" />
@@ -106,10 +90,12 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
             <span className="font-semibold">Hướng di chuyển:</span>
             <span
               className={`rounded px-2 py-1 font-semibold ${
-                data?.direction === "in" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                data?.car?.isOut === false
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
               }`}
             >
-              {data?.direction === "in" ? "Vào bãi" : "Ra khỏi bãi"}
+              {data?.car?.isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
             </span>
           </div>
         </CardContent>

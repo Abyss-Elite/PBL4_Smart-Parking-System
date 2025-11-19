@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import authAPI from "@/api/auth/authApi";
+import { authAPI } from "@/api/auth/authApi";
 import PATH from "@/routes/PATH";
 import { setToken } from "@/utils/tokenStorage";
 
@@ -24,18 +24,13 @@ export default function LoginForm({ onShowReset }) {
       localStorage.setItem("username", res.data.username);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("userId", res.data.id);
-      console.log("accessToken:", res.data.accessToken);
-      setToken({ accessToken: res.data.accessToken });
+      // setToken({ accessToken: res.data.accessToken });
       localStorage.setItem("accessToken", res.data.accessToken);
+      console.log("accessToken", localStorage.getItem("accessToken"));
 
-      console.log("toi day")
-
-      if (data.role === "ADMIN"){
-        console.log("qua tai");
-         router.push(PATH.DASHBOARD.ADMIN_HOME);
-      }
-      else {
-        console.log("o day");
+      if (data.role === "ADMIN") {
+        router.push(PATH.DASHBOARD.ADMIN_HOME);
+      } else {
         router.push("/home");
       }
     } catch (err) {
@@ -67,7 +62,7 @@ export default function LoginForm({ onShowReset }) {
         )}
         <Button
           onClick={handleLogin}
-          className="w-full bg-blue-600 font-bold text-white hover:bg-blue-700"
+          className="w-full cursor-pointer bg-blue-600 font-bold text-white hover:bg-blue-700"
         >
           Đăng nhập
         </Button>

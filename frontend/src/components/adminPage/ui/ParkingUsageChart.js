@@ -6,7 +6,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const COLORS = ["#22c55e", "#e5e7eb"];
 
-export default function ParkingUsageChart({ target = 85, label = "Đang sử dụng" }) {
+export default function ParkingUsageChart({ target, label = "Đang sử dụng" }) {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {

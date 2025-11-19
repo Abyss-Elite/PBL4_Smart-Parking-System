@@ -1,6 +1,6 @@
 import api from "@/lib/axiosInstance";
 
-const authAPI = {
+export const authAPI = {
   login: ({ email, password }) => {
     return api.post("user/login", { email, password });
   },
@@ -11,5 +11,3 @@ const authAPI = {
     return api.post("user/reset-password", { username, email, password });
   },
 };
-
-export default authAPI;

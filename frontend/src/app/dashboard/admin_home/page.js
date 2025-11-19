@@ -5,26 +5,42 @@ import { useEffect, useState } from "react";
 import ParkingUsageChart from "@/components/adminPage/ui/ParkingUsageChart";
 import RevenueChart from "@/components/adminPage/ui/RevenueChart";
 import RecentVehicleTable from "@/components/adminPage/ui/RecentVehicleTable";
-import ExpiringTicketList from "@/components/adminPage/ui/ExpiringTicketList";
+import NextReservedCars from "@/components/adminPage/ui/NextReservedCars";
 import ItemCard from "@/components/adminPage/ui/ItemCard";
 import PATH from "@/routes/PATH";
 import { useRouter } from "next/navigation";
-import userAPI from "@/api/user/userAPI";
-import carAPI from "@/api/car/carAPI";
+import { carAPI } from "@/api/car/carAPI";
+import { percentageToInt } from "@/utils/percentageToInt";
+import { revenueAPI } from "@/api/revenue/revenueAPI";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { parkingLotAPI } from "@/api/parking-lot/parkingLotAPI";
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [working, setWorking] = useState(false);
-  const [numberUsers, setNumberUsers] = useState(0);
+  const [totalBookedCars, setTotalBookedCars] = useState(0);
   const [parkingUsageInfo, setParkingUsageInfo] = useState({});
+  // const [revenueCurrentMonth, setRevenueCurrentMonth] = useState(0);
+  const [recentActivitiesCars, setRecentActivitiesCars] = useState([]);
+  const [nextReservedCars, setNextReservedCars] = useState([]);
+  const [currentVehicleCondition, setCurrentVehicleCondition] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await userAPI.getNumberUsers();
-      const res2 = await carAPI.getUsageInfo(); 
-      setNumberUsers(res.data.userNumber);
+      const res = await carAPI.getTotalBookedCars();
+      const res2 = await parkingLotAPI.getUsageInfo();
+      // const res3 = await revenueAPI.revenueCurrentMonth();
+      const res4 = await carAPI.getRecentActivitiesCar();
+      const res5 = await carAPI.getNextReservedCars();
+      const res6 = await parkingLotAPI.getCurrentVehicleCondition();
+      setTotalBookedCars(res.data.totalBookedCars);
+      setCurrentVehicleCondition(res6.data);
+      console.log(res6.data);
       setParkingUsageInfo(res2.data);
-    }
+      // setRevenueCurrentMonth(res3.data.totalfee);
+      setRecentActivitiesCars(res4.data);
+      setNextReservedCars(res5.data);
+    };
     fetchData();
   }, []);
 
@@ -42,17 +58,6 @@ export default function AdminDashboard() {
     { month: "T5", revenue: 24000000 },
   ];
 
-  const activityList = [
-    { plate: "43A-12345", time: "08:42", status: "Vào" },
-    { plate: "92B-67890", time: "09:10", status: "Ra" },
-    { plate: "43C-22334", time: "09:45", status: "Vào" },
-  ];
-
-  const expiringTickets = [
-    { apartment: "A101", plate: "43A-12345", expiryDate: "15/10/2025" },
-    { apartment: "B204", plate: "92B-67890", expiryDate: "18/10/2025" },
-  ];
-
   return (
     <div className="space-y-6 p-4">
       <div className="flex items-center justify-between">
@@ -63,26 +68,41 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <ItemCard title="Tổng xe đang gửi" content={parkingUsageInfo.currentCount} classNameContent="text-2xl font-bold" />
-        <ItemCard title="Căn hộ đăng ký" content={numberUsers} classNameContent="text-2xl font-bold" />
         <ItemCard
-          title="Doanh thu tháng này"
-          content="58,000,000₫"
-          classNameContent="text-2xl font-bold text-green-600"
+          title="Tổng xe đang gửi"
+          content={currentVehicleCondition.totalCurrentCars}
+          classNameContent="text-2xl font-bold"
         />
-        <ItemCard title="Chỗ đỗ còn trống" content={parkingUsageInfo.remainingSlots} classNameContent="text-2xl font-bold" />
+        <ItemCard
+          title="Xe đăng ký chỗ trước"
+          content={totalBookedCars}
+          classNameContent="text-2xl font-bold"
+        />
+        {/* <ItemCard
+          title="Doanh thu tháng này"
+          content={formatCurrency(revenueCurrentMonth)}
+          classNameContent="text-2xl font-bold text-green-600"
+        /> */}
+        <ItemCard
+          title="Chỗ đỗ còn trống"
+          content={currentVehicleCondition.totalAvailable}
+          classNameContent="text-2xl font-bold"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <RevenueChart revenueData={revenueData} />
 
-        <ParkingUsageChart target={parkingUsageInfo.usageRate} label="Đang sử dụng" />
+        <ParkingUsageChart
+          target={percentageToInt(parkingUsageInfo.usageRate)}
+          label="Đang sử dụng"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <RecentVehicleTable activityList={activityList} />
+        <RecentVehicleTable activityList={recentActivitiesCars} />
 
-        <ExpiringTicketList expiringTickets={expiringTickets} />
+        <NextReservedCars expiringTickets={nextReservedCars} />
       </div>
     </div>
   );
