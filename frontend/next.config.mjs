@@ -5,6 +5,7 @@ const nextConfig = {
       "cdn.dribbble.com",
       "photo.znews.vn",
       "upload.wikimedia.org",
+      "images.unsplash.com",
       "192.168.1.14", // (tuỳ chọn) ESP32-CAM
       "192.168.1.12", // (tuỳ chọn) AI server
     ],

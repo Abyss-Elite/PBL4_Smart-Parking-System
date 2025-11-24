@@ -11,8 +11,6 @@ import PATH from "@/routes/PATH";
 import { useRouter } from "next/navigation";
 import { carAPI } from "@/api/car/carAPI";
 import { percentageToInt } from "@/utils/percentageToInt";
-import { revenueAPI } from "@/api/revenue/revenueAPI";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { parkingLotAPI } from "@/api/parking-lot/parkingLotAPI";
 
 export default function AdminDashboard() {
