@@ -17,6 +17,7 @@ const PATH = {
     },
     SCHEDULE: "/dashboard/schedule",
     SETTING: "/dashboard/setting",
+    PROFILE: "/dashboard/profile",
   },
 };
 

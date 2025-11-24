@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconHome } from "../ui/icon/IconHome";
-import { IconAccountManagement } from "../ui/icon/IconAccountManagement";
-import { IconVehicleManagement } from "../ui/icon/IconVehicleManagement";
 import { IconParkingLotManagement } from "../ui/icon/IconParkingLotManagement";
+import { IconEnployee } from "../ui/icon/IconEmployee";
 import { IconSecurityManagement } from "../ui/icon/IconSecurityManagement";
 import { IconReport } from "../ui/icon/IconReport";
 import PATH from "@/routes/PATH";
@@ -24,7 +23,7 @@ export function SideBarContent() {
     {
       label: "On_Duty Staff Management",
       path: PATH.DASHBOARD.ON_DUTY_STAFF_MANAGEMENT,
-      icon: <IconParkingLotManagement />,
+      icon: <IconEnployee />,
     },
     {
       label: "Entry & Exit History",
@@ -40,19 +39,20 @@ export function SideBarContent() {
 
   const renderNavLink = ({ label, path, icon }) => {
     const isActive = pathname.startsWith(path);
-    const itemClass = isActive
-      ? "px-2 py-2 bg-[#F3F4F6] rounded-[6]"
-      : "px-2 py-2 hover:bg-[#F3F4F6] rounded-[6]";
-    const divClass = isActive
-      ? "gap-2 flex items-center text-green-600 font-semibold"
-      : "gap-2 flex items-center text-[#747778] hover:text-green-600 hover:font-semibold transition-all";
+
+    const linkClass = `
+      flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-300
+      ${
+        isActive
+          ? "bg-[#F3F4F6] dark:bg-gray-700 text-green-600 font-semibold"
+          : "text-[#747778] hover:text-green-600 hover:font-semibold hover:bg-[#F3F4F6] dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+      }
+    `;
 
     return (
-      <Link key={path} href={path} className={itemClass}>
-        <div className={divClass}>
-          {icon}
-          <span>{label}</span>
-        </div>
+      <Link key={path} href={path} className={linkClass}>
+        {icon}
+        <span>{label}</span>
       </Link>
     );
   };

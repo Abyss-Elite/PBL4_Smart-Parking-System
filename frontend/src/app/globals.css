@@ -1,6 +1,30 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+body {
+  font-family: "Inter", sans-serif;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #e1dfdf;
+  border-radius: 4px;
+}
+
+html.dark body::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+* {
+  transition:
+    color 0.3s,
+    background-color 0.3s,
+    border-color 0.3s;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
