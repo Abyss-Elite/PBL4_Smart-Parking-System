@@ -1,3 +1,5 @@
+"use client";
+
 export default function SelectedCars({ cars }) {
   return (
     <div className="mt-4 space-y-3">
@@ -8,9 +10,8 @@ export default function SelectedCars({ cars }) {
           <p className="font-semibold">
             {c.slot} — {c.plate}
           </p>
-          <p className="text-sm text-gray-500">
-            {c.start} → {c.end}
-          </p>
+          {c.mode === "week" && <p className="text-sm text-gray-500">Tuần: {c.weekStart}</p>}
+          {c.mode === "month" && <p className="text-sm text-gray-500">Tháng: {c.month}</p>}
         </div>
       ))}
     </div>
