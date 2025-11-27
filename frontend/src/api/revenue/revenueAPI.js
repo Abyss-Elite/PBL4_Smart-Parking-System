@@ -4,4 +4,8 @@ export const revenueAPI = {
   revenueCurrentMonth: () => {
     return api.get("/fees/total/current-month");
   },
+
+  revenueWeek: (date) => {
+    return api.get(`/revenue/week?date=${date}`);
+  },
 };

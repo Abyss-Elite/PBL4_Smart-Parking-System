@@ -12,7 +12,11 @@ export default function ConfirmPage() {
   useEffect(() => {
     const data = localStorage.getItem("parking_booking");
     if (data) {
-      setCars(JSON.parse(data));
+      try {
+        setCars(JSON.parse(data));
+      } catch (err) {
+        console.error("Lỗi parse data:", err);
+      }
     }
   }, []);
 
@@ -67,11 +71,10 @@ export default function ConfirmPage() {
                     <strong>Biển số:</strong> {c.plate}
                   </p>
                   <p>
-                    <strong>Giờ vào:</strong> {c.start}
+                    <strong>Chế độ:</strong> {c.mode}
                   </p>
-                  <p>
-                    <strong>Giờ ra:</strong> {c.end}
-                  </p>
+                  {c.weekStart && <p>Tuần: {c.weekStart}</p>}
+                  {c.month && <p>Tháng: {c.month}</p>}
                 </div>
               ))}
             </div>
@@ -81,7 +84,7 @@ export default function ConfirmPage() {
 
       <button
         onClick={handleContinue}
-        className="self-start rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+        className="self-start rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 cursor-pointer"
       >
         Continue
       </button>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { addWeeks, startOfWeek, endOfWeek, format, isBefore, isAfter } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { revenueAPI } from "@/api/revenue/revenueAPI";
 
 export function ReportWeek({ initialStartDate }) {
   const apiDate = new Date(initialStartDate);
@@ -30,9 +31,8 @@ export function ReportWeek({ initialStartDate }) {
       const dateStr = format(currentWeekStart, "yyyy-MM-dd");
 
       try {
-        const res = await fetch(`http://localhost:8083/api/revenue/week?date=${dateStr}`);
-        const json = await res.json();
-        setData(json);
+        const res = await revenueAPI.revenueWeek(dateStr);
+        setData(res.data);
       } catch (err) {
         console.error("Lỗi API tuần:", err);
       }

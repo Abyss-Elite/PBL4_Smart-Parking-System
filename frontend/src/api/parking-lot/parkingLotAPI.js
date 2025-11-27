@@ -10,4 +10,8 @@ export const parkingLotAPI = {
   getInitialStartDate: () => {
     return api.get("/parkingLot/firstActiveDate");
   },
+
+  getUsageTrend: () => {
+    return api.get("/parkingLot/weeklyUsage");
+  },
 };

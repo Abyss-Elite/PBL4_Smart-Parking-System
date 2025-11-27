@@ -9,9 +9,9 @@ export default function ReportStatsPage() {
   const [initialStartDate, setInitialStartDate] = useState();
   useEffect(() => {
     const fetchData = async () => {
-      const res = await parkingLotAPI.getInitialStartDate();
-      const raw = res.data.initialStartDate;
-
+      // const res = await parkingLotAPI.getInitialStartDate();
+      // const raw = res.data.initialStartDate;
+      const raw = "2025-01-01T00:00:00.000Z";
       if (!raw) return;
 
       const date = new Date(raw).toISOString().slice(0, 10);
