@@ -4,7 +4,7 @@ const PATH = {
   DASHBOARD: {
     ADMIN_HOME: "/dashboard/admin_home",
     ON_DUTY_STAFF_MANAGEMENT: "/dashboard/on_duty_staff_management",
-    ENTRY_AND_EXIT_HISTORY: "/dashboard/entry_and_exit_history",
+    TRANSACTION_HISTORY: "/dashboard/transaction_history",
     REPORTS_AND_ANALYTICS: "/dashboard/reports_and_analytics",
     PARKING_LOT_MANAGEMENT: {
       HOME: "/dashboard/parking_lot_management",
