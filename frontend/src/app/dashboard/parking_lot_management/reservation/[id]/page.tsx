@@ -160,7 +160,7 @@ export default function ReservationDetailManagementPage({
     }
     fetchData();
   },[id, weekStart]);
-  console.log(weekStart);
+
   return (
     <>
       <div className="container mx-auto px-4 py-6">

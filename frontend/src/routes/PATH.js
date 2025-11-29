@@ -12,13 +12,16 @@ const PATH = {
       RESERVATION: {
         HOME: "/dashboard/parking_lot_management/reservation",
         DETAIL: (id) => `/dashboard/parking_lot_management/reservation/${id}`,
-        PAYMENT: "/dashboard/parking_lot_management/reservation/payment",
       },
     },
     SCHEDULE: "/dashboard/schedule",
     SETTING: "/dashboard/setting",
     PROFILE: "/dashboard/profile",
   },
+  PARKING_RESERVATION: {
+    PAYMENT: "/parkingReservation/payment",
+    PENDINGBILL: (id) => `/parkingReservation/pending-bill/${id}`,
+  }
 };
 
 export default PATH;

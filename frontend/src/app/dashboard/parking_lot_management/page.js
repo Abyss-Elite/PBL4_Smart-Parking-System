@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import GeneralParking from "@/components/parking/generalParking/GeneralParking";
-import ReservationDemo from "@/components/parking/reservation/Reservation-demo";
+import ReservationParking from "@/components/parking/reservation/ReservationParking";
 
 export default function ParkingLotManagementPage() {
-  const [tab, setTab] = useState("reserved");
+  const [tab, setTab] = useState("free");
 
   return (
     <div className="space-y-6 p-6">
@@ -17,18 +17,18 @@ export default function ParkingLotManagementPage() {
         <CardContent>
           <Tabs value={tab} onValueChange={setTab} className="w-full">
             <TabsList className="bg-muted mb-4 grid w-full grid-cols-2 rounded-xl p-1">
-              <TabsTrigger value="free" className="rounded-xl">
+              <TabsTrigger value="reserved" className="rounded-xl">
                 Bãi đặt trước
               </TabsTrigger>
-              <TabsTrigger value="reserved" className="rounded-xl">
+              <TabsTrigger value="free" className="rounded-xl">
                 Bãi tự do
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="free">
-              <ReservationDemo />
-            </TabsContent>
             <TabsContent value="reserved">
+              <ReservationParking />
+            </TabsContent>
+            <TabsContent value="free">
               <GeneralParking />
             </TabsContent>
           </Tabs>
