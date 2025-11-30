@@ -40,9 +40,9 @@ export default function FreeHistory() {
   const [searchText, setSearchText] = useState("");
   const fetchData = async (query?: string) => {
     try {
-      // const res = await transaction_historyAPI.getTransactionHistoryOfFreeParking(query);
-      // setData(res.data);
-      setData(mockFreeHistory);
+      const res = await transaction_historyAPI.getTransactionHistoryOfFreeParking(query);
+      setData(res.data);
+      // setData(mockFreeHistory);
     } catch (error) {
       console.error("Lỗi khi fetch history free:", error);
     }

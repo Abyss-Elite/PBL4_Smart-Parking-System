@@ -43,9 +43,9 @@ export default function ReservedHistory() {
   const [searchText, setSearchText] = useState("");
   const fetchData = async (query?:string) => {
     try {
-      // const res = await transaction_historyAPI.getTransactionHistoryOfReservedParking(query);
-      // setData(res.data);
-      setData(mockReservedHistory);
+      const res = await transaction_historyAPI.getTransactionHistoryOfReservedParking(query);
+      setData(res.data);
+      // setData(mockReservedHistory);
     } catch (error) {
       console.error("Lỗi khi fetch history reserved:", error);
     }
