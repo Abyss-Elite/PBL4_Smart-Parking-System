@@ -19,13 +19,13 @@ export default function SlotPage() {
 
   const [errorMsg, setErrorMsg] = useState("");
 
-  const slots = Array.from({ length: 50 }, (_, i) => `A${i + 1}`);
+  const slots = Array.from({ length: 50 }, (_, i) => `B${i + 1}`);
 
   const booked = {
-    A1: { week: ["2025-11-24", "2025-12-01"], month: [] },
-    A2: { week: [], month: ["2025-11"] },
-    A3: { week: ["2025-11-24"], month: [] },
-    A4: { week: [], month: ["2025-12"] },
+    B1: { week: ["2025-11-24", "2025-12-01"], month: [] },
+    B2: { week: [], month: ["2025-11"] },
+    B3: { week: ["2025-11-24"], month: [] },
+    B4: { week: [], month: ["2025-12"] },
   };
 
   const handleAddCar = (car) => {

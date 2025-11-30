@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { bookingAPI } from "@/api/booking/bookingAPI";
+import { convertOldCarsToNew } from "@/utils/booking";
+import { Car } from "@/types/car";
+import PATH from "@/routes/PATH";
 
 export default function ConfirmPage() {
-  const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState<Car[]>([]);
   const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -14,7 +17,9 @@ export default function ConfirmPage() {
     const data = localStorage.getItem("parking_booking");
     if (data) {
       try {
-        setCars(JSON.parse(data));
+        const oldCars = JSON.parse(data);
+        const newCars = convertOldCarsToNew(oldCars);
+        setCars(newCars);
       } catch (err) {
         console.error("Lỗi parse data:", err);
       }
@@ -35,7 +40,7 @@ export default function ConfirmPage() {
       console.log(payload);
       const res = await bookingAPI.createBooking(payload);
       const booking = res.data;
-      router.push(PATH.PARKING_RESERVATION.PENDINGGBILL(booking.id));
+      router.push(PATH.PARKING_RESERVATION.PENDINGBILL(booking.id));
     }catch (err) {
       console.error("Booking Error:", err);
       alert("Không thể tạo booking. Vui lòng thử lại.");
@@ -88,20 +93,20 @@ export default function ConfirmPage() {
                 className="rounded-xl border bg-gray-50 p-5 shadow-sm hover:shadow-md transition"
               >
                 <p className="mb-1">
-                  <strong>Chỗ: </strong> {c.slot}
+                  <strong>Chỗ: </strong> {c.spotName}
                 </p>
                 <p className="mb-1">
-                  <strong>Biển số: </strong> {c.plate}
+                  <strong>Biển số: </strong> {c.licensePlate}
                 </p>
                 <p className="mb-1">
                   <strong>Chế độ: </strong> {c.mode}
                 </p>
 
-                {c.weekStart && (
-                  <p className="text-sm text-gray-600">Tuần: {c.weekStart}</p>
+                {c.mode == "week" && (
+                  <p className="text-sm text-gray-600">Tuần: {c.startTimeBooking}</p>
                 )}
-                {c.month && (
-                  <p className="text-sm text-gray-600">Tháng: {c.month}</p>
+                {c.mode == "month" && (
+                  <p className="text-sm text-gray-600">Tháng: {c.startTimeBooking}</p>
                 )}
               </div>
             ))}

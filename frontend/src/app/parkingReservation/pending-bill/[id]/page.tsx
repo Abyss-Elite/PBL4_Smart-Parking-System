@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { bookingAPI } from "@/api/booking/bookingAPI";
 import { useRouter } from "next/navigation";
 import PATH from "@/routes/PATH";
+import { CarBookingPending } from "@/types/car";
+import { format } from "date-fns";
 
 export default function PendingBillPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -31,21 +33,21 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
   const [booking, setBooking] = useState<{
     customerName: string;
     customerPhone: string;
-    cars: any[];
-    total: number;
+    cars: CarBookingPending[];
+    totalAmount: number;
   }>({
     customerName: "",
     customerPhone: "",
     cars: [],
-    total: 0,
+    totalAmount: 0,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const res = await bookingAPI.getBooking(id);
-        // setBooking(res.data);
-        setBooking(mockBooking);
+        const res = await bookingAPI.getBooking(id);
+        setBooking(res.data);
+        // setBooking(mockBooking);
       } catch (err) {
         console.error("Error fetching bill:", err);
       } finally {
@@ -57,7 +59,7 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
 
   const handlePayment = () => {
     router.push(
-      `${PATH.PARKING_RESERVATION.PAYMENT}?id=${id}&total=${booking.total}`
+      `${PATH.PARKING_RESERVATION.PAYMENT}?id=${id}&total=${booking.totalAmount}`
     );
 
   };
@@ -100,25 +102,21 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
                 className="rounded-xl border bg-gray-50 p-4 shadow-sm hover:shadow-md transition"
               >
                 <p>
-                  <strong>Chỗ:</strong> {car.slot}
+                  <strong>Chỗ:</strong> {car.parkingSpot.name}
                 </p>
                 <p>
-                  <strong>Biển số:</strong> {car.plate}
-                </p>
-                <p>
-                  <strong>Chế độ:</strong> {car.mode}
+                  <strong>Biển số:</strong> {car.licensePlate}
                 </p>
 
-                {car.weekStart && (
-                  <p className="text-sm text-gray-600">
-                    Tuần: {car.weekStart}
-                  </p>
-                )}
-                {car.month && (
-                  <p className="text-sm text-gray-600">
-                    Tháng: {car.month}
-                  </p>
-                )}
+                <ul>
+                  <strong>Thời gian đặt</strong>
+                  <li className="text-sm text-gray-600 ml-2.5">
+                    Bắt đầu: {format(new Date(car.startTimeBooking), "HH:mm dd-MM-yyyy")}
+                  </li>
+                  <li className="text-sm text-gray-600 ml-2.5">
+                    Kết thúc: {format(new Date(car.endTimeBooking), "HH:mm dd-MM-yyyy")}
+                  </li>
+                </ul>
               </div>
             ))}
           </div>
@@ -129,7 +127,7 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
         <div className="flex items-center justify-between text-xl font-semibold">
           <span>Tổng tiền:</span>
           <span className="text-green-600">
-            {booking.total?.toLocaleString("vi-VN")}₫
+            {booking.totalAmount?.toLocaleString("vi-VN")}₫
           </span>
         </div>
 
