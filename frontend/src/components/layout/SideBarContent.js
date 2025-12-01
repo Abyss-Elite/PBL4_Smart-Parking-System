@@ -26,8 +26,8 @@ export function SideBarContent() {
       icon: <IconEnployee />,
     },
     {
-      label: "Entry & Exit History",
-      path: PATH.DASHBOARD.ENTRY_AND_EXIT_HISTORY,
+      label: "Transaction History",
+      path: PATH.DASHBOARD.TRANSACTION_HISTORY,
       icon: <IconSecurityManagement />,
     },
     {
