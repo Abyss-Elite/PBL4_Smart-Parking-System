@@ -1,6 +1,8 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { userBookingPageAPI } from "@/api/parking-lot/userBookingPageAPI";
 
 export default function PaymentPage() {
   const searchParams = useSearchParams();
@@ -8,27 +10,33 @@ export default function PaymentPage() {
   const id = searchParams.get("id");
   const total = searchParams.get("total");
 
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const xxx = async () => {
+      setLoading(true);
+      try {
+        const res = await userBookingPageAPI.vnpayPayment({ total, id });
+        const data = res.data;
+        if (data.paymentUrl) {
+          window.location.href = data.paymentUrl;
+        } else {
+          alert("Không nhận được paymentUrl");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Lỗi tạo thanh toán");
+      } finally {
+        setLoading(false);
+      }
+    };
+  }, [id, total]);
+
   return (
-    <div className="mx-auto max-w-xl px-6 py-10 space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Thanh toán</h1>
-
-      <div className="rounded-2xl border bg-white p-6 shadow-sm space-y-4">
-        <div className="text-gray-700 space-y-2">
-          <p>
-            <strong>Mã hóa đơn:</strong> {id}
-          </p>
-          <p>
-            <strong>Số tiền cần thanh toán:</strong>{" "}
-            <span className="text-green-600 font-semibold text-xl">
-              {Number(total).toLocaleString("vi-VN")}₫
-            </span>
-          </p>
-        </div>
-      </div>
-
-      <button className="w-full rounded-xl bg-green-600 py-3 text-white font-medium hover:bg-green-700 transition shadow">
-        Xác nhận thanh toán
-      </button>
+    <div className="h-screen w-screen content-center">
+      {loading && (
+        <p className="text-2xl font-medium text-green-400 shadow-emerald-400">Đang tạo...</p>
+      )}
     </div>
   );
 }

@@ -21,7 +21,8 @@ const PATH = {
   PARKING_RESERVATION: {
     PAYMENT: "/parkingReservation/payment",
     PENDINGBILL: (id) => `/parkingReservation/pending-bill/${id}`,
-  }
+    HOME: "/parkingReservation",
+  },
 };
 
 export default PATH;
