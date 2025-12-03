@@ -7,37 +7,43 @@ import RevenueChart from "@/components/adminPage/ui/RevenueChart";
 import RecentVehicleTable from "@/components/adminPage/ui/RecentVehicleTable";
 import NextReservedCars from "@/components/adminPage/ui/NextReservedCars";
 import ItemCard from "@/components/adminPage/ui/ItemCard";
+import { formatCurrency } from "@/utils/formatCurrency";
 import PATH from "@/routes/PATH";
 import { useRouter } from "next/navigation";
 import { carAPI } from "@/api/car/carAPI";
 import { percentageToInt } from "@/utils/percentageToInt";
 import { parkingLotAPI } from "@/api/parking-lot/parkingLotAPI";
+import { revenueAPI } from "@/api/revenue/revenueAPI";
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [working, setWorking] = useState(false);
   const [totalBookedCars, setTotalBookedCars] = useState(0);
   const [parkingUsageInfo, setParkingUsageInfo] = useState({});
-  // const [revenueCurrentMonth, setRevenueCurrentMonth] = useState(0);
+  const [revenueCurrentMonth, setRevenueCurrentMonth] = useState(0);
   const [recentActivitiesCars, setRecentActivitiesCars] = useState([]);
   const [nextReservedCars, setNextReservedCars] = useState([]);
   const [currentVehicleCondition, setCurrentVehicleCondition] = useState({});
+  const [revenueData, setRevenueData] = useState();
+
+  const yearNow = new Date().getFullYear();
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await carAPI.getTotalBookedCars();
       const res2 = await parkingLotAPI.getUsageInfo();
-      // const res3 = await revenueAPI.revenueCurrentMonth();
+      const res3 = await revenueAPI.revenueCurrentMonth();
       const res4 = await carAPI.getRecentActivitiesCar();
       const res5 = await carAPI.getNextReservedCars();
       const res6 = await parkingLotAPI.getCurrentVehicleCondition();
+      const res7 = await revenueAPI.revenueYear(yearNow);
       setTotalBookedCars(res.data.totalBookedCars);
       setCurrentVehicleCondition(res6.data);
-      console.log(res6.data);
       setParkingUsageInfo(res2.data);
-      // setRevenueCurrentMonth(res3.data.totalfee);
+      setRevenueCurrentMonth(res3.data.revenue);
       setRecentActivitiesCars(res4.data);
       setNextReservedCars(res5.data);
+      setRevenueData(res7.data);
     };
     fetchData();
   }, []);
@@ -47,14 +53,6 @@ export default function AdminDashboard() {
     setTimeout(() => setWorking(false), 2000);
     router.push(PATH.DASHBOARD.PARKING_LOT_MANAGEMENT.Gate_Surveillance);
   };
-
-  const revenueData = [
-    { month: "T1", revenue: 12000000 },
-    { month: "T2", revenue: 18000000 },
-    { month: "T3", revenue: 22000000 },
-    { month: "T4", revenue: 16000000 },
-    { month: "T5", revenue: 24000000 },
-  ];
 
   return (
     <div className="space-y-6 p-4">
@@ -76,11 +74,11 @@ export default function AdminDashboard() {
           content={totalBookedCars}
           classNameContent="text-2xl font-bold"
         />
-        {/* <ItemCard
+        <ItemCard
           title="Doanh thu tháng này"
           content={formatCurrency(revenueCurrentMonth)}
           classNameContent="text-2xl font-bold text-green-600"
-        /> */}
+        />
         <ItemCard
           title="Chỗ đỗ còn trống"
           content={currentVehicleCondition.totalAvailable}
@@ -100,7 +98,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <RecentVehicleTable activityList={recentActivitiesCars} />
 
-        <NextReservedCars expiringTickets={nextReservedCars} />
+        <NextReservedCars nextReservedCars={nextReservedCars} />
       </div>
     </div>
   );

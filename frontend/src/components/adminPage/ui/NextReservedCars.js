@@ -10,7 +10,7 @@ export default function NextReservedCars({ nextReservedCars }) {
         <table className="w-full text-sm">
           <thead className="border-b">
             <tr className="text-left">
-              <th>Biển số</th>
+              <th className="py-2">Biển số</th>
               <th>Thời gian đã đặt</th>
             </tr>
           </thead>
@@ -21,7 +21,7 @@ export default function NextReservedCars({ nextReservedCars }) {
                   key={index}
                   className={`border-b ${index === nextReservedCars.length - 1 ? "last:border-none" : ""}`}
                 >
-                  <td>{car.plate}</td>
+                  <td className="py-2">{car.plate}</td>
                   <td>{car.scheduledTimeIn}</td>
                 </tr>
               ))}
