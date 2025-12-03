@@ -30,10 +30,20 @@ export default function SlotPage() {
     fetchData();
   }, []);
 
-  const slots = dataSlot?.map((s) => s.name) || [];
+  const slots =
+    dataSlot
+      ?.map((s) => s.name)
+      .sort((a, b) => {
+        const numA = parseInt(a.replace(/\D+/g, ""));
+        const numB = parseInt(b.replace(/\D+/g, ""));
+        return numA - numB;
+      }) || [];
 
   useEffect(() => {
     if (!parkingSpots) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const initial = {};
 
@@ -41,6 +51,13 @@ export default function SlotPage() {
       if (!initial[s.name]) initial[s.name] = [];
 
       if (s.startTimeBooking && s.endTimeBooking) {
+        const end = new Date(s.endTimeBooking);
+        end.setHours(0, 0, 0, 0);
+
+        // nếu endTimeBooking < hôm nay → bỏ qua
+        if (end < today) return;
+
+        //  push booking còn hiệu lực
         initial[s.name].push({
           id: s.id,
           spotId: s.id,
@@ -53,6 +70,13 @@ export default function SlotPage() {
               : "month",
         });
       }
+    });
+
+    // Sort từng slot theo endTimeBooking tăng dần
+    Object.keys(initial).forEach((key) => {
+      initial[key].sort(
+        (a, b) => new Date(a.endTimeBooking).getTime() - new Date(b.endTimeBooking).getTime()
+      );
     });
 
     setBooked(initial);
@@ -163,12 +187,6 @@ export default function SlotPage() {
         </div>
 
         {selectedSlot ? (
-          // <BookingForm
-          //   slot={selectedSlot}
-          //   bookingMode={bookingMode}
-          //   onAddCar={handleAddCar}
-          //   booked={booked[selectedSlot]}
-          // />
           <BookingForm
             slot={selectedSlot}
             bookingMode={bookingMode}

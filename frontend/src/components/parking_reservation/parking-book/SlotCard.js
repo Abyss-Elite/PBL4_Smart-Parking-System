@@ -20,13 +20,15 @@ export default function SlotCard({
     color: "text-green-600",
     text: "Chưa ai đặt",
     icon: <ParkingCircle size={18} />,
+    bgColor: "bg-white",
   };
 
   if (selected === slot) {
     status = {
-      border: "border-yellow-400",
-      color: "text-yellow-600",
+      border: "border-yellow-300",
+      color: "text-yellow-500",
       text: "Bạn đang chọn chỗ này",
+      bgColor: "bg-amber-50",
       icon: <ParkingCircle size={18} />,
     };
   } else if (userCarCurrent) {
@@ -38,8 +40,8 @@ export default function SlotCard({
     };
   } else if (isBookedByOthers) {
     status = {
-      border: "border-orange-500",
-      color: "text-orange-500",
+      border: "border-orange-300",
+      color: "text-orange-300",
       text: "Đã được đặt",
       icon: <Clock size={18} />,
     };
@@ -48,7 +50,7 @@ export default function SlotCard({
   return (
     <div
       onClick={() => onSelectCar && onSelectCar(slot)}
-      className={`cursor-pointer rounded-xl border-2 p-2 shadow hover:bg-gray-50 ${status.border}`}
+      className={`cursor-pointer rounded-xl border-2 p-2 shadow ${status.border} ${status.bgColor} ${selected === slot ? "" : "hover:bg-gray-50"} `}
     >
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold">{slot}</p>
