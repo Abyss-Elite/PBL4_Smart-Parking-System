@@ -142,10 +142,47 @@ export default function BookingForm({ slot, bookingMode, onAddCar, booked }) {
         <>
           <div className="flex-col gap-0">
             <p>Chọn tháng</p>
-            <input
+            {/* <input
               type="month"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
+              className="w-full rounded border p-2"
+            /> */}
+            <input
+              type="month"
+              value={month}
+              onChange={(e) => {
+                const selected = e.target.value; // "2025-12"
+                const [year, monthNum] = selected.split("-").map(Number);
+                const today = new Date();
+                const firstDayOfSelected = new Date(year, monthNum - 1, 1);
+
+                // Tháng quá khứ
+                if (
+                  firstDayOfSelected.getFullYear() < today.getFullYear() ||
+                  (firstDayOfSelected.getFullYear() === today.getFullYear() &&
+                    firstDayOfSelected.getMonth() < today.getMonth())
+                ) {
+                  setError("Không được chọn tháng quá khứ");
+                  setMonth("");
+                  return;
+                }
+
+                // Nếu chọn tháng hiện tại và ngày hôm nay >= 15 → không cho đặt full tháng
+                if (
+                  firstDayOfSelected.getFullYear() === today.getFullYear() &&
+                  firstDayOfSelected.getMonth() === today.getMonth() &&
+                  today.getDate() >= 15
+                ) {
+                  setError("Không thể đặt full tháng hiện tại từ ngày 16 trở đi");
+                  setMonth("");
+                  return;
+                }
+
+                // Hợp lệ → xóa lỗi
+                setError("");
+                setMonth(selected);
+              }}
               className="w-full rounded border p-2"
             />
           </div>
