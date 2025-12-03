@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { addDays, format, lastDayOfMonth } from "date-fns";
 
-export default function BookingForm({ slot, bookingMode, onAddCar, booked }) {
+export default function BookingForm({ slot, bookingMode, onAddCar, booked, onSwitchToMonth }) {
   const [licensePlate, setLicensePlate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [numWeeks, setNumWeeks] = useState(1);
@@ -132,6 +132,21 @@ export default function BookingForm({ slot, bookingMode, onAddCar, booked }) {
             />
           </div>
 
+          {numWeeks >= 4 && (
+            <div className="mt-2 rounded-lg bg-yellow-100 p-2 text-sm text-yellow-800">
+              Bạn đã chọn số tuần đủ để đặt theo tháng.
+              <br />
+              <button
+                onClick={() => {
+                  onSwitchToMonth();
+                }}
+                className="mt-1 font-semibold text-blue-700 underline hover:text-blue-900 cursor-pointer"
+              >
+                Nhấn vào đây để chuyển sang đặt tháng
+              </button>
+            </div>
+          )}
+
           {startDate && validateNumWeeks(numWeeks) && (
             <p>
               Ngày kết thúc: {format(addDays(new Date(startDate), numWeeks * 7 - 1), "yyyy-MM-dd")}
@@ -168,11 +183,11 @@ export default function BookingForm({ slot, bookingMode, onAddCar, booked }) {
                   return;
                 }
 
-                // Nếu chọn tháng hiện tại và ngày hôm nay >= 15 → không cho đặt full tháng
+                // Nếu chọn tháng hiện tại và ngày hôm nay >= 10 → không cho đặt full tháng
                 if (
                   firstDayOfSelected.getFullYear() === today.getFullYear() &&
                   firstDayOfSelected.getMonth() === today.getMonth() &&
-                  today.getDate() >= 15
+                  today.getDate() >= 10
                 ) {
                   setError("Không thể đặt full tháng hiện tại từ ngày 16 trở đi");
                   setMonth("");

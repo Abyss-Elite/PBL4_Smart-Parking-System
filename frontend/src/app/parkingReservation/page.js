@@ -32,28 +32,6 @@ export default function SlotPage() {
 
   const slots = dataSlot?.map((s) => s.name) || [];
 
-  // useEffect(() => {
-  //   if (!parkingSpots) return;
-
-  //   const initial = {};
-  //   parkingSpots.forEach((s) => {
-  //     initial[s.name] = [];
-  //     if (s.startTimeBooking && s.endTimeBooking) {
-  //       initial[s.name].push({
-  //         id: s.id,
-  //         spotId: s.id,
-  //         licensePlate: null,
-  //         startTimeBooking: s.startTimeBooking,
-  //         endTimeBooking: s.endTimeBooking,
-  //         mode:
-  //           differenceInDays(new Date(s.endTimeBooking), new Date(s.startTimeBooking)) <= 14
-  //             ? "week"
-  //             : "month",
-  //       });
-  //     }
-  //   });
-  //   setBooked(initial);
-  // }, [parkingSpots]);
   useEffect(() => {
     if (!parkingSpots) return;
 
@@ -79,14 +57,6 @@ export default function SlotPage() {
 
     setBooked(initial);
   }, [parkingSpots]);
-
-  // const parkingSpots = [
-  //   { id: 1, name: "B1", startTimeBooking: "2026-06-01", endTimeBooking: "2026-06-07" },
-  //   { id: 2, name: "B2", startTimeBooking: "2026-06-10", endTimeBooking: "2026-06-23" },
-  //   { id: 3, name: "B3", startTimeBooking: "2026-11-01", endTimeBooking: "2026-11-30" },
-  //   { id: 4, name: "B4", startTimeBooking: "2026-12-01", endTimeBooking: "2026-12-31" },
-  //   { id: 5, name: "B5", startTimeBooking: null, endTimeBooking: null },
-  // ];
 
   // ----- Thêm xe -----
   const handleAddCar = (car) => {
@@ -193,11 +163,18 @@ export default function SlotPage() {
         </div>
 
         {selectedSlot ? (
+          // <BookingForm
+          //   slot={selectedSlot}
+          //   bookingMode={bookingMode}
+          //   onAddCar={handleAddCar}
+          //   booked={booked[selectedSlot]}
+          // />
           <BookingForm
             slot={selectedSlot}
             bookingMode={bookingMode}
             onAddCar={handleAddCar}
             booked={booked[selectedSlot]}
+            onSwitchToMonth={() => setBookingMode("month")}
           />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-500">
