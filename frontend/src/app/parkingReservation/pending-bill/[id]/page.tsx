@@ -61,7 +61,6 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
     router.push(
       `${PATH.PARKING_RESERVATION.PAYMENT}?id=${id}&total=${booking.totalAmount}`
     );
-
   };
 
   if (loading) {
@@ -133,7 +132,7 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
 
         <button
           onClick={handlePayment}
-          className="mt-6 w-full rounded-lg bg-green-600 px-6 py-3 text-white shadow-md hover:bg-green-700 transition"
+          className="mt-6 w-full rounded-lg bg-green-600 px-6 py-3 text-white shadow-md hover:bg-green-700 transition cursor-pointer"
         >
           Thanh toán
         </button>

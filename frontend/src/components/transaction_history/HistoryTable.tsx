@@ -23,18 +23,22 @@ export default function HistoryTable({ data, type }: Props) {
         <thead className="bg-gray-100 text-gray-700">
           <tr>
             <th className="px-3 py-3">Mã giao dịch</th>
-            <th className="px-3 py-3">Biển số</th>
             <th className="px-3 py-3">Tài khoản</th>
-            <th className="px-3 py-3">Thời gian vào</th>
-            <th className="px-3 py-3">Thời gian ra</th>
-            <th className="px-3 py-3">Tổng thời gian</th>
-            <th className="px-3 py-3">Số tiền</th>
-            <th className="px-3 py-3">Thời gian thanh toán</th>
-            {type === "reserved" && (
+            {type === "reserved" ? (
               <>
                 <th className="px-3 py-3">Mã đặt trước</th>
+                <th className="px-3 py-3">Thời gian đặt </th>
+              </>
+            ) : (
+              <>
+                <th className="px-3 py-3">Biển số xe</th>
+                <th className="px-3 py-3">Thời gian vào</th>
+                <th className="px-3 py-3">Thời gian ra</th>
+                <th className="px-3 py-3">Tổng thời gian</th>
               </>
             )}
+            <th className="px-3 py-3">Số tiền</th>
+            <th className="px-3 py-3">Thời gian thanh toán</th>
           </tr>
         </thead>
 
@@ -45,18 +49,22 @@ export default function HistoryTable({ data, type }: Props) {
               className="border-b hover:bg-gray-50 transition"
             >
               <td className="px-3 py-3">{item.transactionId}</td>
-              <td className="px-3 py-3">{item.licensePlate}</td>
               <td className="px-3 py-3">{item.accountName}</td>
-              <td className="px-3 py-3">{item.checkInTime}</td>
-              <td className="px-3 py-3">{item.checkOutTime}</td>
-              <td className="px-3 py-3">{item.totalTime}</td>
-              <td className="px-3 py-3 font-medium">{item.amount}</td>
-              <td className="px-3 py-3">{item.paymentTime}</td>
-              {type === "reserved" && (
+              {type === "reserved" ? (
                 <>
                   <td className="px-3 py-3">{item.reservedCode}</td>
+                  <td className="px-3 py-3">{item.reservedTime}</td>
+                </>
+              ) : (
+                <>
+                  <td className="px-3 py-3">{item.licensePlate}</td>
+                  <td className="px-3 py-3">{item.checkInTime}</td>
+                  <td className="px-3 py-3">{item.checkOutTime}</td>
+                  <td className="px-3 py-3">{item.totalTime}</td>
                 </>
               )}
+              <td className="px-3 py-3 font-medium">{item.amount}</td>
+              <td className="px-3 py-3">{item.paymentTime}</td>
             </tr>
           ))}
         </tbody>
