@@ -54,9 +54,6 @@ export default function ReservationParking() {
           <CardTitle className="text-lg font-semibold">
             Reserved Parking
           </CardTitle>
-          <Button className="bg-green-600 text-white hover:bg-green-700">
-            Reserve
-          </Button>
         </CardHeader>
 
         <CardContent className="grid grid-cols-3 gap-6 md:grid-cols-5 justify-items-center">

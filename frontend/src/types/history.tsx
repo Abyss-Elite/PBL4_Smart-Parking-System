@@ -1,14 +1,14 @@
 export type ParkingType = "reserved" | "free";
 
 export interface HistoryItem {
-  licensePlate: string;
-  checkInTime: string;
+  transactionId: string;
+  amount: number;
+  accountName: string;
+  paymentTime: string;  
+  licensePlate?: string;
+  checkInTime?: string;
   checkOutTime?: string;
   reservedTime?: string; 
-  paymentTime: string;  
-  totalTime: number;
-  amount: number;
-  transactionId: string;
-  accountName: string;
+  totalTime?: number;
   reservedCode?: string;    
 }
