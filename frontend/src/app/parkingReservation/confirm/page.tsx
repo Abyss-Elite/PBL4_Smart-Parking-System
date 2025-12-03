@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { bookingAPI } from "@/api/booking/bookingAPI";
 import { convertOldCarsToNew } from "@/utils/booking";
 import { Car } from "@/types/car";
+import { formatDateOnly } from "@/utils/formatDateOnly";
 import PATH from "@/routes/PATH";
 
 export default function ConfirmPage() {
@@ -12,6 +13,35 @@ export default function ConfirmPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const phoneRegex = /^0(3|5|7|8|9)[0-9]{8,9}$/;
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!/^\d*$/.test(value)) {
+      setPhoneError("Chỉ được nhập số");
+    } else {
+      setPhoneError("");
+    }
+    setPhone(value);
+  }
+
+  const handleBlur = () => {
+    if (phone.length === 11 || phone.length === 10) {
+      if (!phoneRegex.test(phone)) {
+        setPhoneError("Số điện thoại không hợp lệ");
+      } else {
+        setPhoneError("");
+      }
+    } else {
+      if (phone.length > 11) {
+        setPhoneError("Số điện thoại không được lớn hơn 11 số");
+      }
+      else {
+        setPhoneError("Số điện thoại không đủ 10, 11 số");
+      }
+    }
+  };
 
   useEffect(() => {
     const data = localStorage.getItem("parking_booking");
@@ -26,22 +56,27 @@ export default function ConfirmPage() {
     }
   }, []);
 
-  const handleContinue = async() => {
+  const handleContinue = async () => {
     if (!name || !phone) {
       alert("Vui lòng điền đầy đủ thông tin khách hàng");
       return;
     }
+    if (!phoneRegex.test(phone)) {
+      alert("Số điện thoại không hợp lệ");
+      return;
+    }
+
     try {
       const payload = {
         customerName: name,
         customerPhone: phone,
         cars: cars,
-      }
+      };
       console.log(payload);
       const res = await bookingAPI.createBooking(payload);
       const booking = res.data;
       router.push(PATH.PARKING_RESERVATION.PENDINGBILL(booking.id));
-    }catch (err) {
+    } catch (err) {
       console.error("Booking Error:", err);
       alert("Không thể tạo booking. Vui lòng thử lại.");
     }
@@ -49,7 +84,6 @@ export default function ConfirmPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-6 py-8">
-
       <h1 className="text-3xl font-bold tracking-tight">Booking Summary</h1>
 
       <div className="rounded-2xl border bg-white p-6 shadow-sm">
@@ -73,9 +107,11 @@ export default function ConfirmPage() {
               type="tel"
               placeholder="Nhập số điện thoại"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
+              onBlur={handleBlur}
               className="w-full rounded-lg border px-3 py-2 shadow-sm focus:border-green-500 focus:outline-none"
             />
+            {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
           </div>
         </div>
       </div>
@@ -90,7 +126,7 @@ export default function ConfirmPage() {
             {cars.map((c, i) => (
               <div
                 key={i}
-                className="rounded-xl border bg-gray-50 p-5 shadow-sm hover:shadow-md transition"
+                className="rounded-xl border bg-gray-50 p-5 shadow-sm transition hover:shadow-md"
               >
                 <p className="mb-1">
                   <strong>Chỗ: </strong> {c.spotName}
@@ -103,10 +139,10 @@ export default function ConfirmPage() {
                 </p>
 
                 {c.mode == "week" && (
-                  <p className="text-sm text-gray-600">Tuần: {c.startTimeBooking}</p>
+                  <p className="text-sm text-gray-600">Tuần: {formatDateOnly(c.startTimeBooking)}</p>
                 )}
                 {c.mode == "month" && (
-                  <p className="text-sm text-gray-600">Tháng: {c.startTimeBooking}</p>
+                  <p className="text-sm text-gray-600">Tháng: {formatDateOnly(c.startTimeBooking)}</p>
                 )}
               </div>
             ))}
@@ -117,7 +153,7 @@ export default function ConfirmPage() {
       <div>
         <button
           onClick={handleContinue}
-          className="rounded-lg bg-green-600 px-6 py-2 text-white shadow-md hover:bg-green-700 transition"
+          className="rounded-lg bg-green-600 px-6 py-2 text-white shadow-md transition hover:bg-green-700 cursor-pointer"
         >
           Continue
         </button>

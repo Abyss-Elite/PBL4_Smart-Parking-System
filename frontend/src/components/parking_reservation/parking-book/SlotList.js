@@ -1,17 +1,8 @@
 "use client";
 import SlotCard from "./SlotCard";
 
-export default function SlotList({
-  slots,
-  selectedSlot,
-  cars,
-  booked,
-  bookingMode,
-  weekStart,
-  month,
-  onSelectSlot,
-}) {
-  const yourCarsForSlot = (slot) => cars.filter((c) => c.slot === slot);
+export default function SlotList({ slots, selectedSlot, cars, booked, bookingMode, onSelectSlot }) {
+  const yourCarsForSlot = (slot) => cars.filter((c) => c.spotName === slot);
 
   return (
     <div className="space-y-4">
@@ -20,10 +11,8 @@ export default function SlotList({
           <SlotCard
             key={s}
             slot={s}
-            booked={booked[s] || { week: [], month: [] }}
+            booked={booked[s] || []}
             bookingMode={bookingMode}
-            currentWeek={weekStart}
-            currentMonth={month}
             userCars={yourCarsForSlot(s)}
             onSelectCar={onSelectSlot}
             selected={selectedSlot}

@@ -1,4 +1,6 @@
 import api from "@/lib/axiosInstance";
+import axios from "axios";
+import { CONFIG } from "@/lib/config";
 
 export const carAPI = {
   getCarByUserId: (id) => {
@@ -18,14 +20,16 @@ export const carAPI = {
   },
   getReservatedSpot: (id, startOfWeek) => {
     return api.get(`/parkingSpot/${id}/bookings`, {
-      params: {startOfWeek},
+      params: { startOfWeek },
     });
   },
-  getBookingDetail: (bookingId)=>{
-    return api.get(`/parkingLot/${bookingId}`)
+  getBookingDetail: (bookingId) => {
+    return api.get(`/parkingLot/${bookingId}`);
   },
-  getAllSpotReservation: ()=>{
+  getAllSpotReservation: () => {
     return api.get("/parkingLot/2/spots");
-  }
+  },
+  getAllBooking: () => {
+    return axios.get(`${CONFIG.API_BASE_URL}/bookings`);
+  },
 };
-
