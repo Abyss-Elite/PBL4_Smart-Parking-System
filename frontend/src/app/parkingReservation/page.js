@@ -1,81 +1,152 @@
 "use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { differenceInDays } from "date-fns";
 import BookingForm from "@/components/parking_reservation/parking-book/BookingForm";
 import SlotList from "@/components/parking_reservation/parking-book/SlotList";
 import CartIcon from "@/components/parking_reservation/parking-book/CartIcon";
+import { carAPI } from "@/api/car/carAPI";
+import { convertBookings } from "@/utils/convertBookings";
 import { Car } from "lucide-react";
 
 export default function SlotPage() {
-  const router = useRouter();
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState([]); // danh sách xe user thêm
   const [bookingMode, setBookingMode] = useState("week");
+  const [parkingSpots, setParkingSpots] = useState();
+  const [dataSlot, setDataSlot] = useState();
+  const [booked, setBooked] = useState({});
 
-  const [weekStart, setWeekStart] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [month, setMonth] = useState(format(new Date(), "yyyy-MM"));
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await carAPI.getAllBooking();
+      const res1 = await carAPI.getAllSpotReservation();
+      const data = res.data;
+      const data1 = res1.data;
+      const parkingData = convertBookings(data);
+      console.log("data: ", parkingData);
+      setParkingSpots(parkingData);
+      setDataSlot(data1);
+    };
+    fetchData();
+  }, []);
 
-  const [errorMsg, setErrorMsg] = useState("");
+  const slots = dataSlot?.map((s) => s.name) || [];
 
-  const slots = Array.from({ length: 50 }, (_, i) => `B${i + 1}`);
+  // useEffect(() => {
+  //   if (!parkingSpots) return;
 
-  const booked = {
-    B1: { week: ["2025-11-24", "2025-12-01"], month: [] },
-    B2: { week: [], month: ["2025-11"] },
-    B3: { week: ["2025-11-24"], month: [] },
-    B4: { week: [], month: ["2025-12"] },
-  };
+  //   const initial = {};
+  //   parkingSpots.forEach((s) => {
+  //     initial[s.name] = [];
+  //     if (s.startTimeBooking && s.endTimeBooking) {
+  //       initial[s.name].push({
+  //         id: s.id,
+  //         spotId: s.id,
+  //         licensePlate: null,
+  //         startTimeBooking: s.startTimeBooking,
+  //         endTimeBooking: s.endTimeBooking,
+  //         mode:
+  //           differenceInDays(new Date(s.endTimeBooking), new Date(s.startTimeBooking)) <= 14
+  //             ? "week"
+  //             : "month",
+  //       });
+  //     }
+  //   });
+  //   setBooked(initial);
+  // }, [parkingSpots]);
+  useEffect(() => {
+    if (!parkingSpots) return;
 
+    const initial = {};
+
+    parkingSpots.forEach((s) => {
+      if (!initial[s.name]) initial[s.name] = [];
+
+      if (s.startTimeBooking && s.endTimeBooking) {
+        initial[s.name].push({
+          id: s.id,
+          spotId: s.id,
+          licensePlate: null,
+          startTimeBooking: s.startTimeBooking,
+          endTimeBooking: s.endTimeBooking,
+          mode:
+            differenceInDays(new Date(s.endTimeBooking), new Date(s.startTimeBooking)) <= 14
+              ? "week"
+              : "month",
+        });
+      }
+    });
+
+    setBooked(initial);
+  }, [parkingSpots]);
+
+  // const parkingSpots = [
+  //   { id: 1, name: "B1", startTimeBooking: "2026-06-01", endTimeBooking: "2026-06-07" },
+  //   { id: 2, name: "B2", startTimeBooking: "2026-06-10", endTimeBooking: "2026-06-23" },
+  //   { id: 3, name: "B3", startTimeBooking: "2026-11-01", endTimeBooking: "2026-11-30" },
+  //   { id: 4, name: "B4", startTimeBooking: "2026-12-01", endTimeBooking: "2026-12-31" },
+  //   { id: 5, name: "B5", startTimeBooking: null, endTimeBooking: null },
+  // ];
+
+  // ----- Thêm xe -----
   const handleAddCar = (car) => {
-    setErrorMsg("");
+    if (!selectedSlot) return false;
 
-    if (!selectedSlot) {
-      return setErrorMsg("Vui lòng chọn chỗ đậu xe trước khi thêm xe.");
-    }
+    // Booking gốc từ server
+    const baseBookings = parkingSpots
+      .filter((p) => p.name === selectedSlot)
+      .filter((p) => p.startTimeBooking && p.endTimeBooking)
+      .map((p) => ({
+        id: p.id,
+        startTimeBooking: p.startTimeBooking,
+        endTimeBooking: p.endTimeBooking,
+      }));
 
-    const time = car.mode === "week" ? car.weekStart : car.month;
-    if (!time) return setErrorMsg("Vui lòng chọn thời gian cho xe.");
+    // Booking user đang thêm
+    const uiBookings = booked[selectedSlot] || [];
 
-    const slotBookedTimes = booked[selectedSlot] || { week: [], month: [] };
+    const existing = [...baseBookings, ...uiBookings];
 
-    if (car.mode === "week") {
-      // Tuần trùng với booked tuần hoặc nằm trong booked tháng
-      if (
-        slotBookedTimes.week.includes(time) ||
-        slotBookedTimes.month.some((m) => time.startsWith(m))
-      ) {
-        return setErrorMsg(`Chỗ ${selectedSlot} đã có người đặt tuần ${time}.`);
-      }
-    } else {
-      // Tháng trùng với booked tháng hoặc có tuần nào trong booked tuần trùng tháng
-      if (
-        slotBookedTimes.month.includes(time) ||
-        slotBookedTimes.week.some((w) => w.startsWith(time))
-      ) {
-        return setErrorMsg(`Chỗ ${selectedSlot} đã có người đặt tháng ${time}.`);
-      }
-    }
+    const s2 = new Date(car.startTimeBooking).getTime();
+    const e2 = new Date(car.endTimeBooking).getTime();
 
-    // Kiểm tra trùng với xe đã thêm của user
-    const userDuplicate = cars.find(
-      (c) =>
-        c.slot === selectedSlot &&
-        c.mode === car.mode &&
-        ((car.mode === "week" && c.weekStart === car.weekStart) ||
-          (car.mode === "month" && c.month === car.month))
-    );
+    // Kiểm tra trùng
+    const isOverlap = existing.some((b) => {
+      const s1 = new Date(b.startTimeBooking).getTime();
+      const e1 = new Date(b.endTimeBooking).getTime();
+      return s1 <= e2 && s2 <= e1;
+    });
 
-    if (userDuplicate) {
-      return setErrorMsg(`Bạn đã chọn chỗ ${selectedSlot} vào thời gian này.`);
-    }
+    if (isOverlap) return false; // báo cho BookingForm
 
-    // Thêm xe
-    setCars((prev) => [...prev, { ...car, slot: selectedSlot }]);
+    // Thêm booking mới
+    const spot = parkingSpots.find((p) => p.name === selectedSlot);
+    const newCar = {
+      ...car,
+      spotId: spot.id,
+      id: `${spot.id}-${Date.now()}`, // unique
+      spotName: selectedSlot,
+    };
+
+    setCars((prev) => [...prev, newCar]);
+    setBooked((prev) => ({
+      ...prev,
+      [selectedSlot]: [...(prev[selectedSlot] || []), newCar],
+    }));
+
+    return true;
   };
 
-  const handleRemoveCar = (index) => setCars((prev) => prev.filter((_, i) => i !== index));
+  // ----- Xoá xe -----
+  const handleRemoveCar = (index) => {
+    const car = cars[index];
+    setCars((prev) => prev.filter((_, i) => i !== index));
+    setBooked((prev) => {
+      const copy = { ...prev };
+      copy[car.spotName] = copy[car.spotName].filter((c) => c.id !== car.id);
+      return copy;
+    });
+  };
 
   return (
     <div className="grid grid-cols-12 gap-6 p-6">
@@ -84,17 +155,13 @@ export default function SlotPage() {
           <Car size={22} className="text-blue-600" />
           Danh sách chỗ đậu
         </h2>
-
         <SlotList
           slots={slots}
           selectedSlot={selectedSlot}
           cars={cars}
           booked={booked}
           bookingMode={bookingMode}
-          weekStart={weekStart}
-          month={month}
           onSelectSlot={setSelectedSlot}
-          onRemoveCar={handleRemoveCar}
         />
       </div>
 
@@ -122,14 +189,16 @@ export default function SlotPage() {
               Theo tháng
             </button>
           </div>
-
           <CartIcon cars={cars} onRemoveCar={handleRemoveCar} />
         </div>
 
-        {errorMsg && <p className="font-medium text-red-500">{errorMsg}</p>}
-
         {selectedSlot ? (
-          <BookingForm slot={selectedSlot} bookingMode={bookingMode} onAddCar={handleAddCar} />
+          <BookingForm
+            slot={selectedSlot}
+            bookingMode={bookingMode}
+            onAddCar={handleAddCar}
+            booked={booked[selectedSlot]}
+          />
         ) : (
           <div className="flex h-full items-center justify-center text-gray-500">
             <div className="text-center">

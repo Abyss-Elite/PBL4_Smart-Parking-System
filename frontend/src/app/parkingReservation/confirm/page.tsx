@@ -26,7 +26,7 @@ export default function ConfirmPage() {
     }
   }, []);
 
-  const handleContinue = async() => {
+  const handleContinue = async () => {
     if (!name || !phone) {
       alert("Vui lòng điền đầy đủ thông tin khách hàng");
       return;
@@ -36,12 +36,12 @@ export default function ConfirmPage() {
         customerName: name,
         customerPhone: phone,
         cars: cars,
-      }
+      };
       console.log(payload);
       const res = await bookingAPI.createBooking(payload);
       const booking = res.data;
       router.push(PATH.PARKING_RESERVATION.PENDINGBILL(booking.id));
-    }catch (err) {
+    } catch (err) {
       console.error("Booking Error:", err);
       alert("Không thể tạo booking. Vui lòng thử lại.");
     }
@@ -49,7 +49,6 @@ export default function ConfirmPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-6 py-8">
-
       <h1 className="text-3xl font-bold tracking-tight">Booking Summary</h1>
 
       <div className="rounded-2xl border bg-white p-6 shadow-sm">
@@ -90,7 +89,7 @@ export default function ConfirmPage() {
             {cars.map((c, i) => (
               <div
                 key={i}
-                className="rounded-xl border bg-gray-50 p-5 shadow-sm hover:shadow-md transition"
+                className="rounded-xl border bg-gray-50 p-5 shadow-sm transition hover:shadow-md"
               >
                 <p className="mb-1">
                   <strong>Chỗ: </strong> {c.spotName}
@@ -117,7 +116,7 @@ export default function ConfirmPage() {
       <div>
         <button
           onClick={handleContinue}
-          className="rounded-lg bg-green-600 px-6 py-2 text-white shadow-md hover:bg-green-700 transition"
+          className="rounded-lg bg-green-600 px-6 py-2 text-white shadow-md transition hover:bg-green-700"
         >
           Continue
         </button>
