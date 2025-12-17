@@ -84,7 +84,7 @@ export default function ReturnPage() {
 
         <div className="mt-6">
           <a
-            href={PATH.PARKING_RESERVATION.HOME}
+            href="http://localhost:3000/parkingReservation"
             className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
           >
             Trở về trang đặt chỗ

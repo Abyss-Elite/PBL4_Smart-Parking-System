@@ -9,6 +9,12 @@ import { formatDateTime } from "@/utils/formatDateTime";
 export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) {
   const [isZoomed, setIsZoomed] = useState(false);
 
+  const handlePayment = () => {
+    router.push(
+      `${PATH.PARKING_RESERVATION.PAYMENT}?id=${data?.car?.id}&total=${data?.fee}`
+    );
+  };
+
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card className="flex flex-col items-center justify-center shadow-xl">
@@ -97,6 +103,22 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
             >
               {data?.car?.isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
             </span>
+            {data?.car?.isOut === true && (
+              <>
+                <div>
+                  <span>Tổng tiền:</span>
+                  <span className="text-green-600">
+                    {data?.fee?.toLocaleString("vi-VN")}₫
+                  </span>
+                </div>
+                <button
+                  onClick={handlePayment}
+                  className="mt-6 w-full rounded-lg bg-green-600 px-6 py-3 text-white shadow-md hover:bg-green-700 transition cursor-pointer"
+                >
+                  Thanh toán
+                </button>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

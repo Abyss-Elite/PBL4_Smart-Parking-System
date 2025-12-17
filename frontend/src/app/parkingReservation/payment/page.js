@@ -13,10 +13,10 @@ export default function PaymentPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const xxx = async () => {
+    const paymentData = async () => {
       setLoading(true);
       try {
-        const res = await userBookingPageAPI.vnpayPayment({ total, id });
+        const res = await userBookingPageAPI.vnpayPayment({ amount: total, orderId: id });
         const data = res.data;
         if (data.paymentUrl) {
           window.location.href = data.paymentUrl;
@@ -30,6 +30,7 @@ export default function PaymentPage() {
         setLoading(false);
       }
     };
+    paymentData();
   }, [id, total]);
 
   return (
