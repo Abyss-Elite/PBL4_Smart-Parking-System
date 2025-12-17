@@ -29,10 +29,12 @@ export function ParkingSearchFilter({ setSearchLicensePlate, onclick }) {
         </SelectContent>
       </Select>
 
-      <Button variant="default" onClick={onclick}>
+      <Button variant="default" onClick={onclick} className="cursor-pointer">
         Tìm kiếm
       </Button>
-      <Button variant="outline">Làm mới</Button>
+      <Button variant="outline" className="cursor-pointer">
+        Làm mới
+      </Button>
     </div>
   );
 }

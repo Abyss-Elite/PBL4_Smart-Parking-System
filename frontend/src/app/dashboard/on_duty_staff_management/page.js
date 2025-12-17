@@ -6,11 +6,12 @@ import WeeklySchedule from "@/components/on_duty_staff_management/WeeklySchedule
 import { set, startOfWeek } from "date-fns";
 import { staffManagementAPI } from "@/api/staff-management/staff-managementAPI";
 import { parkingLotAPI } from "@/api/parking-lot/parkingLotAPI";
+import { formatDateOnly } from "@/utils/formatDateOnly";
 
 export default function SchedulePage() {
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [schedule, setSchedule] = useState([]);
-  const [initialStartDate, setInitialStartDate] = useState("2025-07-07");
+  const [initialStartDate, setInitialStartDate] = useState();
 
   useEffect(() => {
     const fetchStaffManagementData = async () => {
@@ -28,7 +29,7 @@ export default function SchedulePage() {
     const fetchInitialStartDateDta = async () => {
       try {
         const res = await parkingLotAPI.getInitialStartDate();
-        setInitialStartDate(res.data.initialStartDate);
+        setInitialStartDate(formatDateOnly(res.data.firstActiveDate));
       } catch (err) {
         console.error("Lỗi API ngày bắt đầu ban đầu:", err);
       }
@@ -38,7 +39,10 @@ export default function SchedulePage() {
 
   return (
     <div className="space-y-6 p-6">
-      <WeekSelector initialStartDate={initialStartDate} onWeekChange={(start) => setWeekStart(start)} />
+      <WeekSelector
+        initialStartDate={initialStartDate}
+        onWeekChange={(start) => setWeekStart(start)}
+      />
       <WeeklySchedule weekStart={weekStart} schedule={schedule} />
     </div>
   );

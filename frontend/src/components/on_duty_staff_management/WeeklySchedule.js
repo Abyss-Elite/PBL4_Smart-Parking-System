@@ -3,7 +3,7 @@
 import ShiftCell from "./ShiftCell";
 import { addDays, format } from "date-fns";
 
-const shifts = ["08:00-17:30", "17:30-24:00", "00:00-08:00"];
+const shifts = ["08:00-17:30", "17:30-00:00", "00:00-08:00"];
 
 export default function WeeklySchedule({ weekStart, schedule }) {
   const days = [...Array(7)].map((_, i) => addDays(weekStart, i));
@@ -36,10 +36,12 @@ export default function WeeklySchedule({ weekStart, schedule }) {
               </td>
 
               {days.map((day) => {
-                const cell = schedule.find(
-                  (s) => s.date === format(day, "yyyy-MM-dd") && s.shift === shift
-                );
-                return <ShiftCell key={day.toString()} employee={cell?.employee} />;
+                // Lấy tất cả nhân viên cùng ngày + ca
+                const employees = schedule
+                  .filter((s) => s.date === format(day, "yyyy-MM-dd") && s.shift === shift)
+                  .map((s) => s.employee);
+
+                return <ShiftCell key={day.toString()} employees={employees} />;
               })}
             </tr>
           ))}

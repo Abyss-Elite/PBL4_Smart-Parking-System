@@ -24,7 +24,7 @@ export default function UsageTrendChart() {
       }
     };
     fetchData();
-  });
+  }, []);
   return (
     <Card className="rounded-2xl border">
       <CardHeader>

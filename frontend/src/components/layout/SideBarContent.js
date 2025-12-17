@@ -5,6 +5,7 @@ import { IconParkingLotManagement } from "../ui/icon/IconParkingLotManagement";
 import { IconEnployee } from "../ui/icon/IconEmployee";
 import { IconSecurityManagement } from "../ui/icon/IconSecurityManagement";
 import { IconReport } from "../ui/icon/IconReport";
+import { IconManagementEmployee } from "../ui/icon/IconManagementEmployee";
 import PATH from "@/routes/PATH";
 
 export function SideBarContent() {
@@ -24,6 +25,11 @@ export function SideBarContent() {
       label: "On_Duty Staff Management",
       path: PATH.DASHBOARD.ON_DUTY_STAFF_MANAGEMENT,
       icon: <IconEnployee />,
+    },
+    {
+      label: "Management Employee",
+      path: PATH.DASHBOARD.EMPLOYEE.HOME,
+      icon: <IconManagementEmployee />,
     },
     {
       label: "Transaction History",

@@ -6,7 +6,7 @@ import GeneralParking from "@/components/parking/generalParking/GeneralParking";
 import ReservationParking from "@/components/parking/reservation/ReservationParking";
 
 export default function ParkingLotManagementPage() {
-  const [tab, setTab] = useState("free");
+  const [tab, setTab] = useState("reserved");
 
   return (
     <div className="space-y-6 p-6">
@@ -17,14 +17,13 @@ export default function ParkingLotManagementPage() {
         <CardContent>
           <Tabs value={tab} onValueChange={setTab} className="w-full">
             <TabsList className="bg-muted mb-4 grid w-full grid-cols-2 rounded-xl p-1">
-              <TabsTrigger value="reserved" className="rounded-xl">
+              <TabsTrigger value="reserved" className="rounded-xl cursor-pointer">
                 Bãi đặt trước
               </TabsTrigger>
-              <TabsTrigger value="free" className="rounded-xl">
+              <TabsTrigger value="free" className="rounded-xl cursor-pointer">
                 Bãi tự do
               </TabsTrigger>
             </TabsList>
-
             <TabsContent value="reserved">
               <ReservationParking />
             </TabsContent>

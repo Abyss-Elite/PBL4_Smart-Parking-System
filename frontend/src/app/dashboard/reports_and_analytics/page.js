@@ -4,14 +4,14 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ReportTabs } from "@/components/reports_and_analytics/ReportTabs";
 import { useEffect, useState } from "react";
 import { parkingLotAPI } from "@/api/parking-lot/parkingLotAPI";
+import { formatDateOnly } from "@/utils/formatDateOnly";
 
 export default function ReportStatsPage() {
   const [initialStartDate, setInitialStartDate] = useState();
   useEffect(() => {
     const fetchData = async () => {
-      // const res = await parkingLotAPI.getInitialStartDate();
-      // const raw = res.data.initialStartDate;
-      const raw = "2025-01-01T00:00:00.000Z";
+      const res = await parkingLotAPI.getInitialStartDate();
+      const raw = formatDateOnly(res.data.firstActiveDate);
       if (!raw) return;
 
       const date = new Date(raw).toISOString().slice(0, 10);

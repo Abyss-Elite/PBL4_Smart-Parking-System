@@ -95,7 +95,7 @@ export function ReportWeek({ initialStartDate }) {
       <CardContent className="space-y-4">
         <div className="flex items-center gap-4">
           <label htmlFor="monthSelect" className="font-medium text-gray-700">
-            Chọn tháng:
+            Chọn tuần:
           </label>
           <select
             id="monthSelect"

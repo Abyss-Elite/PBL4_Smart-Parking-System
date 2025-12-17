@@ -19,4 +19,7 @@ export const userAPI = {
   deleteUser: (id) => {
     return api.delete(`user/${id}`);
   },
+  information: () => {
+    return api.get("user/me");
+  },
 };

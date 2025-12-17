@@ -14,6 +14,10 @@ const PATH = {
         DETAIL: (id) => `/dashboard/parking_lot_management/reservation/${id}`,
       },
     },
+    EMPLOYEE: {
+      HOME: "/dashboard/employee",
+      DETAIL: (id) => `/dashboard/employee/${id}`,
+    },
     SCHEDULE: "/dashboard/schedule",
     SETTING: "/dashboard/setting",
     PROFILE: "/dashboard/profile",

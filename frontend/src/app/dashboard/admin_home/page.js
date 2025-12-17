@@ -58,7 +58,7 @@ export default function AdminDashboard() {
     <div className="space-y-6 p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Trang Admin</h1>
-        <Button onClick={handleWork} className="bg-green-600 hover:bg-green-700">
+        <Button onClick={handleWork} className="bg-green-600 hover:bg-green-700 cursor-pointer">
           {working ? "Đang xử lý..." : "Giám sát"}
         </Button>
       </div>

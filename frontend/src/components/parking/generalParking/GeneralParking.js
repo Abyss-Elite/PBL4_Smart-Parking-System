@@ -16,25 +16,26 @@ export default function GeneralParking() {
       const res1 = await paidPublicParkingAPI.getCarsInLot();
       setParkedCars(res1.data);
       setNumberParkingCondition(res.data);
+      const data = res.data;
       const stats = [
         {
           title: "Xe đang đỗ",
-          value: numberParkingCondition.parkedCars,
+          value: data.parkedCars,
           color: "bg-blue-100 text-blue-700",
         },
         {
           title: "Tổng số chỗ",
-          value: numberParkingCondition.totalSpots,
+          value: data.totalSpots,
           color: "bg-gray-100 text-gray-700",
         },
         {
           title: "Còn trống",
-          value: numberParkingCondition.availableSpot,
+          value: data.availableSpot,
           color: "bg-green-100 text-green-700",
         },
         {
           title: "Xe vào/ra hôm nay",
-          value: `${numberParkingCondition.carsInToday}/${numberParkingCondition.carsOutToday}`,
+          value: `${data.carsInToday}/${data.carsOutToday}`,
           color: "bg-yellow-100 text-yellow-700",
         },
       ];

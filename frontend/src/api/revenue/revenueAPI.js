@@ -12,4 +12,8 @@ export const revenueAPI = {
   revenueYear: (year) => {
     return api.get(`revenue/year?year=${year}`);
   },
+
+  revenueMonth: (year) => {
+    return api.get(`revenue/monthly?year=${year}`);
+  },
 };
