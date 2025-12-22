@@ -1,33 +1,39 @@
 import { useEffect, useState } from "react";
+import { carAPI } from "@/api/car/carAPI";
 
-export default function BookingDetail({ bookingId, onClose }) {
-  const data1 = {
-    customer_name: "Thanh Tuyen",
-    license_plate: "43H1-355.33",
-    code: "2712",
-    start_time:"2025-11-10T09:00:00Z",
-    end_time:"2025-11-10T11:00:00Z",
-    amount: 50000,
-  };
-
+export default function BookingDetail({ bookingId, spotId, date, onClose }) {
+  // const data1 = {
+  //   customerName: "Thanh Tuyen",
+  //   cars: [
+  //     {
+  //       licensePlate: "43H-35533",
+  //       fee: 150000,
+  //     }
+  //   ],
+  //   code: "2712",
+  // };
   const [bookingDetail, setBookingDetail] = useState({
-    customer_name: "",
-    license_plate: "",
-    code: "",
-    start_time: "",
-    end_time: "",
-    amount: 0,
+    customerName: "",
+    cars: [
+      {
+        licensePlate: "",
+        fee: 0
+      }
+    ],
+    code: ""
   });
 
   useEffect(() => {
+    if (!bookingId || !spotId || !date) return;
     const fetchData = async () => {
-      // const res = await carAPI.getBookingDetail(bookingId);
-      // setBookingDetail(res.data);
-      setBookingDetail(data1);
+      const res = await carAPI.getBookingDetail(bookingId, spotId, date);
+      setBookingDetail(res.data);
+      // setBookingDetail(data1);
     };
     fetchData();
-  }, [bookingId]);
+  }, [bookingId, spotId, date]);
 
+  console.log("BookingDetail render", { bookingId, spotId, date });
   return (
     <>
       <div
@@ -46,26 +52,10 @@ export default function BookingDetail({ bookingId, onClose }) {
           Booking #{bookingDetail.code}
         </h2>
 
-        <p><b>Customer:</b> {bookingDetail.customer_name}</p>
-        <p><b>License:</b> {bookingDetail.license_plate}</p>
+        <p><b>Customer:</b> {bookingDetail.customerName}</p>
+        <p><b>License:</b> {bookingDetail.cars[0].licensePlate}</p>
         <p><b>Code:</b> {bookingDetail.code}</p>
-        <p><b>Start time:</b> {
-          new Date(bookingDetail.start_time).toLocaleTimeString("vi-VN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-            timeZone: "UTC"
-          })
-        }</p>
-        <p><b>End time:</b> {
-          new Date(bookingDetail.end_time).toLocaleTimeString("vi-VN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-            timeZone: "UTC"
-          })
-        }</p>
-        <p><b>Amount:</b> {bookingDetail.amount}</p>
+        <p><b>Fee:</b> {bookingDetail.cars[0].fee}</p>
 
         <button
           className="

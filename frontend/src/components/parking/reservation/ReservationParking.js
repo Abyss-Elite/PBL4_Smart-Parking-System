@@ -9,23 +9,23 @@ import React, { useEffect, useState } from "react";
 import { carAPI } from "@/api/car/carAPI";
 
 export default function ReservationParking() {
-  const data = [
-    { id: 1, name: "A1", status: "AVAILABLE" },
-    { id: 2, name: "A2", status: "BOOKED" },
-    { id: 3, name: "A3", status: "AVAILABLE" },
-    { id: 4, name: "A4", status: "BOOKED" },
-    { id: 5, name: "A5", status: "AVAILABLE" },
-    { id: 6, name: "A6", status: "AVAILABLE" },
-    { id: 7, name: "A7", status: "BOOKED" },
-    { id: 8, name: "A8", status: "AVAILABLE" },
-    { id: 9, name: "A9", status: "BOOKED" },
-    { id: 10, name: "A10", status: "AVAILABLE" },
-    { id: 11, name: "A11", status: "AVAILABLE" },
-    { id: 12, name: "A12", status: "BOOKED" },
-    { id: 13, name: "A13", status: "AVAILABLE" },
-    { id: 14, name: "A14", status: "BOOKED" },
-    { id: 15, name: "A15", status: "AVAILABLE" },
-  ];
+  // const data = [
+  //   { id: 1, name: "A1", status: "AVAILABLE" },
+  //   { id: 2, name: "A2", status: "BOOKED" },
+  //   { id: 3, name: "A3", status: "AVAILABLE" },
+  //   { id: 4, name: "A4", status: "BOOKED" },
+  //   { id: 5, name: "A5", status: "AVAILABLE" },
+  //   { id: 6, name: "A6", status: "AVAILABLE" },
+  //   { id: 7, name: "A7", status: "BOOKED" },
+  //   { id: 8, name: "A8", status: "AVAILABLE" },
+  //   { id: 9, name: "A9", status: "BOOKED" },
+  //   { id: 10, name: "A10", status: "AVAILABLE" },
+  //   { id: 11, name: "A11", status: "AVAILABLE" },
+  //   { id: 12, name: "A12", status: "BOOKED" },
+  //   { id: 13, name: "A13", status: "AVAILABLE" },
+  //   { id: 14, name: "A14", status: "BOOKED" },
+  //   { id: 15, name: "A15", status: "AVAILABLE" },
+  // ];
   const [allSpot, setAllSpot] = useState([])
   const router = useRouter();
   const handleClick = (id) => {
@@ -36,11 +36,10 @@ export default function ReservationParking() {
     const fetchData = async () => {
       try {
         const res = await carAPI.getAllSpotReservation();
-        // setAllSpot(res.data);
-        setAllSpot(data); 
+        setAllSpot(res.data);
+        // setAllSpot(data); 
       } catch (error) {
-        console.error("Error fetching spots:", error);
-        setAllSpot(data);  
+        console.error("Error fetching spots:", error); 
       }
     };
 
