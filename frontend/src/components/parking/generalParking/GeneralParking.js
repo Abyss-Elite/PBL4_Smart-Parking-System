@@ -6,7 +6,7 @@ import { paidPublicParkingAPI } from "@/api/parking-lot/paidPublicParkingAPI";
 
 export default function GeneralParking() {
   const [parkedCars, setParkedCars] = useState([]);
-  const [searchLicensePlate, setSearchLicensePlate] = useState();
+  const [searchLicensePlate, setSearchLicensePlate] = useState("");
   const [parkingCondition, setParkingCondition] = useState();
   const [numberParkingCondition, setNumberParkingCondition] = useState();
 
@@ -44,13 +44,17 @@ export default function GeneralParking() {
     fetchData();
   }, []);
 
-  const handleFetchDataParkedCars = async () => {
-    if (searchLicensePlate === "") {
-      const res = await paidPublicParkingAPI.getParkingCondition();
-      setParkedCars(res.data);
+  const fetchAllCars = async () => {
+    const res = await paidPublicParkingAPI.getCarsInLot();
+    setParkedCars(res.data);
+  };
+
+  const searchCars = async () => {
+    if (!searchLicensePlate || searchLicensePlate.trim() === "") {
+      fetchAllCars();
     } else {
-      const res1 = await paidPublicParkingAPI.searchPlate(searchLicensePlate);
-      setParkedCars(res1.data);
+      const res = await paidPublicParkingAPI.searchPlate(searchLicensePlate);
+      setParkedCars(res.data);
     }
   };
 
@@ -60,9 +64,12 @@ export default function GeneralParking() {
 
       <div className="rounded-2xl bg-white p-3 shadow dark:bg-neutral-900">
         <ParkingSearchFilter
+          searchLicensePlate={searchLicensePlate}
           setSearchLicensePlate={setSearchLicensePlate}
-          onclick={handleFetchDataParkedCars}
+          onSearch={searchCars}
+          onReset={fetchAllCars}
         />
+
         <ParkingTable parkedCars={parkedCars} />
       </div>
     </div>

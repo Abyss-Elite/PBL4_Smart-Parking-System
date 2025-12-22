@@ -7,7 +7,7 @@ export const carAPI = {
     return api.get(`/car/byUser/${id}`);
   },
   getCurrentMonitoredCar: () => {
-    return api.get("/parkingLot/currentPlate");
+    return api.get("/parkingLot/currentPlate/stream");
   },
   getRecentActivitiesCar: () => {
     return api.get("/car/recentActivities");

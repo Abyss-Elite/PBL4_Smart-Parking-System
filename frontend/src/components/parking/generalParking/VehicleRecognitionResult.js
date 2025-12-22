@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ZoomIn, Camera, LogIn, LogOut, Clock, Car, ClipboardCheck } from "lucide-react";
 import { formatDateTime } from "@/utils/formatDateTime";
+import { useRouter } from "next/navigation";
+import PATH from "@/routes/PATH";
 
 export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) {
   const [isZoomed, setIsZoomed] = useState(false);
+  const router = useRouter();
 
   const handlePayment = () => {
-    router.push(
-      `${PATH.PARKING_RESERVATION.PAYMENT}?id=${data?.car?.id}&total=${data?.fee}`
-    );
+    router.push(`${PATH.PARKING_RESERVATION.PAYMENT}?id=${data?.car?.id}&total=${data?.fee}`);
   };
 
   return (
@@ -36,7 +37,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
               />
             ) : (
               <img
-                src="/placeholder-car.png"
+                src={data?.image || "/no-camera.png"}
                 alt="No Camera"
                 width={420}
                 height={280}
@@ -76,19 +77,19 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-500" />
             <span className="font-semibold">Thời gian:</span>
-            <span>{formatDateTime(data?.car?.checkInTime) || "—"}</span>
+            <span>{formatDateTime(data?.time) || "—"}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Car className="h-5 w-5 text-blue-600" />
             <span className="font-semibold">Biển số:</span>
             <span className="text-lg font-bold text-blue-700">
-              {data?.currentPlate || "Không xác định"}
+              {data?.licensePlate || "Không xác định"}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            {data?.car?.isOut === false ? (
+            {data?.isOut === false ? (
               <LogIn className="h-5 w-5 text-green-600" />
             ) : (
               <LogOut className="h-5 w-5 text-red-600" />
@@ -96,24 +97,20 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
             <span className="font-semibold">Hướng di chuyển:</span>
             <span
               className={`rounded px-2 py-1 font-semibold ${
-                data?.car?.isOut === false
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+                data?.isOut === false ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
               }`}
             >
-              {data?.car?.isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
+              {data?.isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
             </span>
-            {data?.car?.isOut === true && (
+            {data?.isOut === true && (
               <>
                 <div>
                   <span>Tổng tiền:</span>
-                  <span className="text-green-600">
-                    {data?.fee?.toLocaleString("vi-VN")}₫
-                  </span>
+                  <span className="text-green-600">{data?.fee?.toLocaleString("vi-VN")}₫</span>
                 </div>
                 <button
                   onClick={handlePayment}
-                  className="mt-6 w-full rounded-lg bg-green-600 px-6 py-3 text-white shadow-md hover:bg-green-700 transition cursor-pointer"
+                  className="mt-6 w-full cursor-pointer rounded-lg bg-green-600 px-6 py-3 text-white shadow-md transition hover:bg-green-700"
                 >
                   Thanh toán
                 </button>

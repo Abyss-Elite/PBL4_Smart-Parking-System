@@ -28,11 +28,7 @@ export default function LoginForm({ onShowReset }) {
       localStorage.setItem("accessToken", res.data.accessToken);
       console.log("accessToken", localStorage.getItem("accessToken"));
 
-      if (data.role === "ADMIN") {
-        router.push(PATH.DASHBOARD.ADMIN_HOME);
-      } else {
-        router.push("/home");
-      }
+      router.push(PATH.DASHBOARD.ADMIN_HOME);
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Sai tài khoản hoặc mật khẩu!");
     }

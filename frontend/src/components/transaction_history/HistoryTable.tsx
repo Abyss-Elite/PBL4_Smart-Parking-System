@@ -2,6 +2,7 @@
 
 import React from "react";
 import { HistoryItem } from "@/types/history";
+import { formatDateTime } from "@/utils/formatDateTime";
 
 interface Props {
   data: HistoryItem[];
@@ -10,16 +11,12 @@ interface Props {
 
 export default function HistoryTable({ data, type }: Props) {
   if (!data || data.length === 0) {
-    return (
-      <div className="text-center text-gray-500 py-10">
-        Không có giao dịch nào.
-      </div>
-    );
+    return <div className="py-10 text-center text-gray-500">Không có giao dịch nào.</div>;
   }
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
-      <table className="min-w-full text-sm text-left">
+      <table className="min-w-full text-left text-sm">
         <thead className="bg-gray-100 text-gray-700">
           <tr>
             <th className="px-3 py-3">Mã giao dịch</th>
@@ -44,27 +41,24 @@ export default function HistoryTable({ data, type }: Props) {
 
         <tbody>
           {data.map((item, index) => (
-            <tr
-              key={index}
-              className="border-b hover:bg-gray-50 transition"
-            >
+            <tr key={index} className="border-b transition hover:bg-gray-50">
               <td className="px-3 py-3">{item.transactionId}</td>
               <td className="px-3 py-3">{item.accountName}</td>
               {type === "reserved" ? (
                 <>
                   <td className="px-3 py-3">{item.reservedCode}</td>
-                  <td className="px-3 py-3">{item.reservedTime}</td>
+                  <td className="px-3 py-3">{formatDateTime(item.createAt)}</td>
                 </>
               ) : (
                 <>
                   <td className="px-3 py-3">{item.licensePlate}</td>
-                  <td className="px-3 py-3">{item.checkInTime}</td>
-                  <td className="px-3 py-3">{item.checkOutTime}</td>
+                  <td className="px-3 py-3">{formatDateTime(item.checkInTime)}</td>
+                  <td className="px-3 py-3">{formatDateTime(item.checkOutTime)}</td>
                   <td className="px-3 py-3">{item.totalTime}</td>
                 </>
               )}
               <td className="px-3 py-3 font-medium">{item.amount}</td>
-              <td className="px-3 py-3">{item.paymentTime}</td>
+              <td className="px-3 py-3">{formatDateTime(item.paymentTime)}</td>
             </tr>
           ))}
         </tbody>

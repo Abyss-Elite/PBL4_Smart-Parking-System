@@ -6,7 +6,7 @@ import ReservedHistory from "@/components/transaction_history/ReservedHistory";
 import FreeHistory from "@/components/transaction_history/FreeHistory";
 
 export default function ParkingLotManagementPage() {
-  const [tab, setTab] = useState("free");
+  const [tab, setTab] = useState("reserved");
 
   return (
     <div className="space-y-6 p-6">

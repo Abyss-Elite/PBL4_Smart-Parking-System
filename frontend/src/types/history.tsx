@@ -10,5 +10,6 @@ export interface HistoryItem {
   checkOutTime?: string;
   reservedTime?: string; 
   totalTime?: number;
-  reservedCode?: string;    
+  reservedCode?: string;
+  createAt?: string;
 }

@@ -112,27 +112,27 @@ export default function ProfilePage() {
   const [form, setForm] = useState(null);
   const [initialData, setInitialData] = useState(null);
   const [notification, setNotification] = useState(null);
-  const list = {
-    id: 3,
-    username: "linh123",
-    phoneNumber: "0123456789",
-    email: "linh@example.com",
-    avaUrl: null,
-    status: "ACTIVE",
-    role: {
-      id: 3,
-      name: "USER",
-    },
-    delete: false,
-  };
+  // const list = {
+  //   id: 3,
+  //   username: "linh123",
+  //   phoneNumber: "0123456789",
+  //   email: "linh@example.com",
+  //   avaUrl: null,
+  //   status: "ACTIVE",
+  //   role: {
+  //     id: 3,
+  //     name: "USER",
+  //   },
+  //   delete: false,
+  // };
   useEffect(() => {
     const fetchInformationData = async () => {
       try {
-        // const res = await userAPI.information();
-        // setForm(res.data);
-        // setInitialData(res.data);
-        setForm(list)
-        setInitialData(list);
+        const res = await userAPI.information();
+        setForm(res.data);
+        setInitialData(res.data);
+        // setForm(list)
+        // setInitialData(list);
       } catch (err) {
         setNotification({
           type: "error",
