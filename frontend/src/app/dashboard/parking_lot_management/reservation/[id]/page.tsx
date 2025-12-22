@@ -1,6 +1,7 @@
 "use client";
 
 import { carAPI } from "@/api/car/carAPI";
+import MonthYearSelector from "@/components/common/MonthYearSelector";
 import WeekSelector from "@/components/common/WeekSelector";
 import BookingDetail from "@/components/parking/BookingDetail";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -14,237 +15,145 @@ export default function ReservationDetailManagementPage({
 }) {
   const { id } = React.use(params);
   const numericId = Number(id);
-  const data1 = {
-    parking_spot_id: numericId,
-    parking_spot_name: "A1",
-    test: "test",
-    day: [
-      {
-        date: "2025-11-10",
-        bookings: [
-          {
-            booking_id: 1,
-            start_time: "2025-11-10T09:00:00Z",
-            end_time: "2025-11-10T11:30:00Z",
-          },
-          {
-            booking_id: 2,
-            start_time: "2025-11-10T12:00:00Z",
-            end_time: "2025-11-10T15:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-11",
-        bookings: [
-          {
-            booking_id: 5,
-            start_time: "2025-11-11T09:00:00Z",
-            end_time: "2025-11-11T11:30:00Z",
-          },
-          {
-            booking_id: 6,
-            start_time: "2025-11-11T12:00:00Z",
-            end_time: "2025-11-11T15:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-12",
-        bookings: [
-          {
-            booking_id: 7,
-            start_time: "2025-11-12T09:00:00Z",
-            end_time: "2025-11-12T11:30:00Z",
-          },
-          {
-            booking_id: 3,
-            start_time: "2025-11-12T12:00:00Z",
-            end_time: "2025-11-12T15:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-13",
-        bookings: [
-          {
-            booking_id: 4,
-            start_time: "2025-11-13T08:00:00Z",
-            end_time: "2025-11-13T11:30:00Z",
-          },
-          {
-            booking_id: 8,
-            start_time: "2025-11-13T15:00:00Z",
-            end_time: "2025-11-13T20:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-14",
-        bookings: [
-          {
-            booking_id: 10,
-            start_time: "2025-11-14T09:00:00Z",
-            end_time: "2025-11-14T11:30:00Z",
-          },
-          {
-            booking_id: 9,
-            start_time: "2025-11-14T12:00:00Z",
-            end_time: "2025-11-14T15:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-15",
-        bookings: [
-          {
-            booking_id: 12,
-            start_time: "2025-11-15T09:00:00Z",
-            end_time: "2025-11-15T11:30:00Z",
-          },
-          {
-            booking_id: 11,
-            start_time: "2025-11-15T12:00:00Z",
-            end_time: "2025-11-15T15:00:00Z",
-          },
-        ],
-      },
-      {
-        date: "2025-11-16",
-        bookings: [
-          {
-            booking_id: 13,
-            start_time: "2025-11-16T09:00:00Z",
-            end_time: "2025-11-16T11:30:00Z",
-          },
-          {
-            booking_id: 14,
-            start_time: "2025-11-16T12:00:00Z",
-            end_time: "2025-11-16T15:00:00Z",
-          },
-        ],
-      },
-    ],
-  };
+  // const data1 = {
+  //   parkingSpotId: numericId,
+  //   parkingSpotName: "A1",
+  //   days: [
+  //     {
+  //       date: "2025-11-01",
+  //       bookings: [
+  //         {
+  //           booking_id: 1,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       date: "2025-11-02",
+  //       bookings: [
+  //         {
+  //           booking_id: 5,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       date: "2025-11-25",
+  //       bookings: [
+  //         {
+  //           booking_id: 12,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       date: "2025-11-29",
+  //       bookings: [
+  //         {
+  //           booking_id: 13,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const [spot, setSpot] = useState({
-    parking_spot_id: numericId,
-    parking_spot_name: "",
-    day: [],
-  });
+    parkingSpotId: numericId,
+    parkingSpotName: "",
+    days: [],
+  })
 
-  const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
-  const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [selectedBookingId, setSelectedBookingId] = useState<number|null>(null);
+  const [daysInMonth, setDaysInMonth] = useState<number>(0)
+  const [month, setMonth] = useState<number>(12)
+  const [year, setYear] =useState<number>(2025)
+  const [startDay, setStartDay] = useState<number>(0)
+  const [date, setDate] = useState<string>()
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const hours = Array.from({ length: 25 }, (_, i) => i);
-
-  function timeToPosition(dateString: string) {
-    const clean = dateString.replace("Z", "");
-    const [datePart, timePart] = clean.split("T");
-    const [hour, minute] = timePart.split(":").map(Number);
-    const hourHeight = 64;
-    return hour * hourHeight + (minute / 60) * hourHeight;
+  const hasBookingDay = (day:number) => {
+    const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    return spot.days.some ((d :any )=> d.date === dateStr && d.bookings.length>0)
   }
+  const getBookingByDay = (day: number) => {
+    const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const dayData = spot.days.find((d: any) => d.date === dateStr);
+    return {
+      bookingId: dayData?.bookings?.[0]?.bookingId ?? null,
+      date: dateStr
+    };
+  };
+  console.log("selectedBookingId", selectedBookingId);
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const date = new Date(weekStart);
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear();
-
-      const formattedDay = `${year}-${month}-${day}`;
-      const res = await carAPI.getReservatedSpot(numericId, formattedDay);
+      const firstDayOfMonth = new Date(year, month - 1, 1);
+      setStartDay(firstDayOfMonth.getDay());
+      const res = await carAPI.getReservatedSpot(numericId, month, year);
       setSpot(res.data);
       // setSpot(data1);
-    };
+    }
     fetchData();
-  }, [id, weekStart, numericId]);
+  },[id, month, year]);
 
   return (
     <>
       <div className="container mx-auto px-4 py-6">
-        <WeekSelector initialStartDate="2025-07-07" onWeekChange={(start) => setWeekStart(start)} />
+        <MonthYearSelector onChange={({month, year, daysInMonth})=> {
+          setMonth(month); 
+          setYear(year); 
+          setDaysInMonth(daysInMonth)
+        }}/>
         <Card className="overflow-x-auto rounded-lg border border-gray-200 shadow-lg">
           <CardHeader className="mb-4 flex items-center justify-between">
             <CardTitle className="text-lg font-semibold">Reserved Parking</CardTitle>
             <h2 className="text-blue-800">
-              Selected parking lot: <b className="font-extrabold">{spot.parking_spot_name}</b>
+              Selected parking lot: <b className="font-extrabold">{spot.parkingSpotName}</b>
             </h2>
           </CardHeader>
 
           <CardContent className="">
-            <div className="w-full overflow-x-auto bg-white p-4">
-              <div className="grid grid-cols-8 border">
-                <div className="border p-2 text-center font-bold">GMT+07</div>
-                {days.map((d, index) => {
-                  const date = new Date(weekStart);
-                  date.setDate(date.getDate() + index);
-                  const dayNumber = date.getDate();
+            <div className="w-full bg-white p-4 rounded-xl shadow">
+              <div className="grid grid-cols-7 text-center font-semibold text-gray-500 mb-2">
+                {days.map((d) => (
+                  <div key={d}>{d}</div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-7 gap-y-2 text-center">
+                {Array.from({ length: startDay }).map((_, i) => (
+                  <div key={`empty-${i}`} />
+                ))}
+
+                {Array.from({ length: daysInMonth }, (_, i) => {
+                  const day = i + 1;
                   return (
-                    <div key={d} className="border p-2 text-center font-bold">
-                      <p>{d}</p>
-                      <h2 className="text-emerald-800">{dayNumber}</h2>
+                    <div
+                      key={day}
+                      onClick={() => {
+                        const { bookingId, date } = getBookingByDay(day);
+                          if (!bookingId) return;
+
+                          setDate(date);
+                          setSelectedBookingId(bookingId);
+                      }}
+                      className={`h-15 flex items-center justify-center rounded-full
+                                cursor-pointer ${hasBookingDay(day) ? "bg-blue-500 text-white hover:bg-blue-600": "hover:bg-gray-100"}`}
+                              
+                    >
+                      {day}
                     </div>
                   );
                 })}
-              </div>
-
-              <div className="relative grid grid-cols-8">
-                <div className="relative border">
-                  {hours.map((h) => (
-                    <div key={h} className="relative h-16 border-b">
-                      <span className="absolute -top-2 left-2 bg-white px-1 text-xs">{h}:00</span>
-                    </div>
-                  ))}
-                </div>
-
-                {days.map((day) => (
-                  <div key={day} className="relative border">
-                    {hours.map((_, i) => (
-                      <div key={i} className="h-16 border-b"></div>
-                    ))}
-
-                    {spot.day
-                      .filter((d) => {
-                        const date = new Date(d.date);
-                        const dayName = days[date.getDay()];
-                        return dayName === day;
-                      })
-                      .flatMap((d) => d.bookings)
-                      .map((booking) => {
-                        const top = timeToPosition(booking.start_time);
-                        const end = timeToPosition(booking.end_time);
-                        const height = end - top;
-
-                        return (
-                          <div
-                            key={booking.booking_id}
-                            className="absolute right-1 left-1 rounded-md border border-blue-800 bg-blue-600 p-2 text-white shadow-md"
-                            onClick={() => setSelectedBookingId(booking.booking_id)}
-                            style={{
-                              top,
-                              height,
-                            }}
-                          >
-                            <div className="text-sm font-semibold">
-                              Booking #{booking.booking_id}
-                            </div>
-                            <div className="text-xs opacity-90">
-                              {booking.start_time.slice(11, 16)} - {booking.end_time.slice(11, 16)}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                ))}
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-      {selectedBookingId && (
-        <BookingDetail bookingId={selectedBookingId} onClose={() => setSelectedBookingId(null)} />
+      {selectedBookingId!==null && (
+        <BookingDetail
+          bookingId={selectedBookingId}
+          spotId = {id}
+          date = {date}
+          onClose={() => setSelectedBookingId(null)}
+        />
       )}
     </>
   );
