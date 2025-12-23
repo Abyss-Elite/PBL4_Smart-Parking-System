@@ -1,9 +1,18 @@
-import axios from "axios";
+import api from "@/lib/axiosInstance";
 
 export const userBookingPageAPI = {
-  vnpayPayment: ({ amount, orderId }) => {
-    return axios.post(
-      `http://192.168.1.5:8084/api/v1/vnpay/create?amount=${encodeURIComponent(amount)}&orderId=${encodeURIComponent(orderId)}`
+  vnpayPayment: ({ amount, bookingId }) => {
+    return api.post(
+      `/vnpay/create?bookingId=${encodeURIComponent(bookingId)}&amount=${encodeURIComponent(amount)}`
     );
+  },
+  paymentReturn: (data) => {
+    const formData = new URLSearchParams();
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+    return api.post("vnpay/return", formData, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
   },
 };

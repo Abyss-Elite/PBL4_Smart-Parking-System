@@ -19,14 +19,10 @@ export default function LoginForm({ onShowReset }) {
   const handleLogin = async () => {
     try {
       const res = await authAPI.login({ email, password });
-
-      const data = res.data;
-      localStorage.setItem("username", res.data.username);
-      localStorage.setItem("role", res.data.role);
-      localStorage.setItem("userId", res.data.id);
-      // setToken({ accessToken: res.data.accessToken });
-      localStorage.setItem("accessToken", res.data.accessToken);
+      setToken({ accessToken: res.data.accessToken, refreshToken: res.data.refreshToken });
+      // localStorage.setItem("accessToken", res.data.accessToken);
       console.log("accessToken", localStorage.getItem("accessToken"));
+      console.log("refreshToken", localStorage.getItem("refreshToken"));
 
       router.push(PATH.DASHBOARD.ADMIN_HOME);
     } catch (err) {

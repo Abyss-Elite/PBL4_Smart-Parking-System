@@ -8,12 +8,19 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { useRouter } from "next/navigation";
 import PATH from "@/routes/PATH";
 
-export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) {
+export default function VehicleRecognitionResult({
+  image,
+  time,
+  data,
+  isOut,
+  onRetake,
+  linkVideo,
+}) {
   const [isZoomed, setIsZoomed] = useState(false);
   const router = useRouter();
 
   const handlePayment = () => {
-    router.push(`${PATH.PARKING_RESERVATION.PAYMENT}?id=${data?.car?.id}&total=${data?.fee}`);
+    router.push(`${PATH.PARKING_RESERVATION.PAYMENT}?bookingId=${data?.id}&amount=${data?.fee}`);
   };
 
   return (
@@ -24,27 +31,13 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           <div className="relative overflow-hidden rounded-lg border shadow-md">
-            {linkVideo ? (
-              /* eslint-disable @next/next/no-img-element */
-              <img
-                src={linkVideo}
-                alt="Live Feed"
-                width={420}
-                height={280}
-                className={`rounded-lg border border-gray-200 object-cover shadow-sm transition-transform duration-300 ${
-                  isZoomed ? "scale-110" : "scale-100"
-                }`}
-              />
-            ) : (
-              <img
-                src={data?.image || "/no-camera.png"}
-                alt="No Camera"
-                width={420}
-                height={280}
-                className="rounded-lg border border-gray-200 object-cover shadow-sm"
-              />
-              /* eslint-enable @next/next/no-img-element */
-            )}
+            <img
+              src={image || "/no-camera.png"}
+              alt="No Camera"
+              width={420}
+              height={280}
+              className="rounded-lg border border-gray-200 object-cover shadow-sm"
+            />
           </div>
 
           <div className="mt-4 flex space-x-3">
@@ -77,7 +70,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-500" />
             <span className="font-semibold">Thời gian:</span>
-            <span>{formatDateTime(data?.time) || "—"}</span>
+            <span>{time ? formatDateTime(time) : "—"}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -89,7 +82,7 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
           </div>
 
           <div className="flex items-center gap-2">
-            {data?.isOut === false ? (
+            {isOut === false ? (
               <LogIn className="h-5 w-5 text-green-600" />
             ) : (
               <LogOut className="h-5 w-5 text-red-600" />
@@ -97,12 +90,12 @@ export default function VehicleRecognitionResult({ data, onRetake, linkVideo }) 
             <span className="font-semibold">Hướng di chuyển:</span>
             <span
               className={`rounded px-2 py-1 font-semibold ${
-                data?.isOut === false ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                isOut === false ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
               }`}
             >
-              {data?.isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
+              {isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
             </span>
-            {data?.isOut === true && (
+            {isOut === true && (
               <>
                 <div>
                   <span>Tổng tiền:</span>

@@ -20,12 +20,12 @@ export const carAPI = {
   },
   getReservatedSpot: (id, month, year) => {
     return api.get(`/parkingSpot/${id}/bookings`, {
-      params: {month, year },
+      params: { month, year },
     });
   },
   getBookingDetail: (bookingId, spotId, date) => {
-    return api.get(`/parkingSpot/bookings/${bookingId}`,{
-      params: {spotId, date}
+    return api.get(`/parkingSpot/bookings/${bookingId}`, {
+      params: { spotId, date },
     });
   },
   getAllSpotReservation: () => {
@@ -33,5 +33,8 @@ export const carAPI = {
   },
   getAllBooking: () => {
     return axios.get(`${CONFIG.API_BASE_URL}/bookings`);
+  },
+  checkInFreeLot: () => {
+    return api.post("/car/checkInFreeLot");
   },
 };

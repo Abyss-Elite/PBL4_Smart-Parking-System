@@ -11,8 +11,8 @@ function DashBoardLayout({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    // const token = getAccessToken();
-    const token = "123456";
+    const token = getAccessToken();
+    // const token = "123456";
     if (!token) router.replace(PATH.LOGIN);
   }, []);
 

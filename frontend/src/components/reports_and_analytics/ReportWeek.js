@@ -18,9 +18,6 @@ export function ReportWeek({ initialStartDate }) {
   const [selectedMonth, setSelectedMonth] = useState(format(initialWeek, "MM/yyyy"));
 
   const [data, setData] = useState({
-    carsOut: 0,
-    carsIn: 0,
-    carsInOut: 0,
     totalRevenue: 0,
     weekStart: "",
     weekEnd: "",
@@ -116,15 +113,6 @@ export function ReportWeek({ initialStartDate }) {
             <span className="font-semibold">Tuần:</span> {weekLabel}
           </p>
 
-          <p>
-            <span className="font-semibold">Lượt xe vào:</span> {data.carsIn}
-          </p>
-          <p>
-            <span className="font-semibold">Lượt xe ra:</span> {data.carsOut}
-          </p>
-          <p>
-            <span className="font-semibold">Tổng lượt vào/ra:</span> {data.carsInOut}
-          </p>
           <p>
             <span className="font-semibold">Tổng phí thu:</span>{" "}
             {data.totalRevenue?.toLocaleString()} đ

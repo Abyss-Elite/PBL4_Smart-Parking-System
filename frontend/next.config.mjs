@@ -10,6 +10,7 @@ const nextConfig = {
       "192.168.1.12", // (tuỳ chọn) AI server
     ],
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

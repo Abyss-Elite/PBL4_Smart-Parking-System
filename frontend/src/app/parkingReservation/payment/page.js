@@ -7,8 +7,8 @@ import { userBookingPageAPI } from "@/api/parking-lot/userBookingPageAPI";
 export default function PaymentPage() {
   const searchParams = useSearchParams();
 
-  const id = searchParams.get("id");
-  const total = searchParams.get("total");
+  const id = searchParams.get("bookingId");
+  const total = searchParams.get("amount");
 
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,7 @@ export default function PaymentPage() {
     const paymentData = async () => {
       setLoading(true);
       try {
-        const res = await userBookingPageAPI.vnpayPayment({ amount: total, orderId: id });
+        const res = await userBookingPageAPI.vnpayPayment({ amount: total, bookingId: id });
         const data = res.data;
         if (data.paymentUrl) {
           window.location.href = data.paymentUrl;

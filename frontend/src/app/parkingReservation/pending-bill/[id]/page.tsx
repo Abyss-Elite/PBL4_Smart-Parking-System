@@ -59,16 +59,12 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
 
   const handlePayment = () => {
     router.push(
-      `${PATH.PARKING_RESERVATION.PAYMENT}?id=${id}&total=${booking.totalAmount}`
+      `${PATH.PARKING_RESERVATION.PAYMENT}?bookingId=${id}&amount=${booking.totalAmount}`
     );
   };
 
   if (loading) {
-    return (
-      <div className="mx-auto mt-10 text-center text-gray-500">
-        Đang tải hóa đơn...
-      </div>
-    );
+    return <div className="mx-auto mt-10 text-center text-gray-500">Đang tải hóa đơn...</div>;
   }
 
   return (
@@ -98,7 +94,7 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
             {booking.cars.map((car, i) => (
               <div
                 key={i}
-                className="rounded-xl border bg-gray-50 p-4 shadow-sm hover:shadow-md transition"
+                className="rounded-xl border bg-gray-50 p-4 shadow-sm transition hover:shadow-md"
               >
                 <p>
                   <strong>Chỗ:</strong> {car.parkingSpot.name}
@@ -109,10 +105,10 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
 
                 <ul>
                   <strong>Thời gian đặt</strong>
-                  <li className="text-sm text-gray-600 ml-2.5">
+                  <li className="ml-2.5 text-sm text-gray-600">
                     Bắt đầu: {format(new Date(car.startTimeBooking), "HH:mm dd-MM-yyyy")}
                   </li>
-                  <li className="text-sm text-gray-600 ml-2.5">
+                  <li className="ml-2.5 text-sm text-gray-600">
                     Kết thúc: {format(new Date(car.endTimeBooking), "HH:mm dd-MM-yyyy")}
                   </li>
                 </ul>
@@ -125,14 +121,12 @@ export default function PendingBillPage({ params }: { params: { id: string } }) 
       <div className="rounded-2xl border bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between text-xl font-semibold">
           <span>Tổng tiền:</span>
-          <span className="text-green-600">
-            {booking.totalAmount?.toLocaleString("vi-VN")}₫
-          </span>
+          <span className="text-green-600">{booking.totalAmount?.toLocaleString("vi-VN")}₫</span>
         </div>
 
         <button
           onClick={handlePayment}
-          className="mt-6 w-full rounded-lg bg-green-600 px-6 py-3 text-white shadow-md hover:bg-green-700 transition cursor-pointer"
+          className="mt-6 w-full cursor-pointer rounded-lg bg-green-600 px-6 py-3 text-white shadow-md transition hover:bg-green-700"
         >
           Thanh toán
         </button>

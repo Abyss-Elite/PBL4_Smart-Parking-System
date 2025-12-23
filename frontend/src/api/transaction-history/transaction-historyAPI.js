@@ -1,14 +1,14 @@
 import api from "@/lib/axiosInstance";
 
 export const transaction_historyAPI = {
-  getTransactionHistoryOfReservedParking: (query) => {
+  getTransactionHistoryOfReservedParking: (keyword) => {
     return api.get("/transaction/2", {
-      params: { query } 
+      params: { keyword } 
     });
   },
-  getTransactionHistoryOfFreeParking: (query) => {
+  getTransactionHistoryOfFreeParking: (keyword) => {
     return api.get("/transaction/1", {
-      params: { query }
+      params: { keyword }
     });
   },
 };

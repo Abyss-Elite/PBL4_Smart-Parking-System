@@ -8,15 +8,12 @@ import UsageTrendChart from "./UsageTrendChart";
 export function ReportTabs({ initialStartDate }) {
   return (
     <Tabs defaultValue="week" className="w-full">
-      <TabsList className="bg-muted grid w-full grid-cols-3 rounded-xl p-1">
+      <TabsList className="bg-muted grid w-full grid-cols-2 rounded-xl p-1">
         <TabsTrigger value="week" className="cursor-pointer rounded-xl">
           Theo tuần
         </TabsTrigger>
         <TabsTrigger value="month" className="cursor-pointer rounded-xl">
           Theo tháng
-        </TabsTrigger>
-        <TabsTrigger value="trend" className="cursor-pointer rounded-xl">
-          Tỷ lệ sử dụng
         </TabsTrigger>
       </TabsList>
 
@@ -26,10 +23,6 @@ export function ReportTabs({ initialStartDate }) {
 
       <TabsContent value="month" className="mt-4">
         <ReportMonth initialStartDate={initialStartDate} />
-      </TabsContent>
-
-      <TabsContent value="trend" className="mt-4">
-        <UsageTrendChart />
       </TabsContent>
     </Tabs>
   );

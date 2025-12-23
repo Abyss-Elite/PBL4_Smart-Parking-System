@@ -1,33 +1,113 @@
 "use client";
 
-import { useEffect, useState, startTransition } from "react";
-import { CheckCircle2, CreditCard, Landmark, Calendar, FileText } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { CheckCircle2, CreditCard, Landmark, Calendar, FileText, XCircle } from "lucide-react";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { userBookingPageAPI } from "@/api/parking-lot/userBookingPageAPI";
 import PATH from "@/routes/PATH";
 
 export default function ReturnPage() {
+  const [status, setStatus] = useState(null); // SUCCESS | FAILED
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const obj = {};
-    params.forEach((v, k) => (obj[k] = v));
+    const txnRef = params.get("vnp_TxnRef");
 
-    startTransition(() => setData(obj));
+    if (!txnRef) {
+      setStatus("FAILED");
+      return;
+    }
+
+    const dataKey = `vnpay_data_${txnRef}`;
+    const statusKey = `vnpay_status_${txnRef}`;
+
+    const cachedStatus = sessionStorage.getItem(statusKey);
+    const cachedData = sessionStorage.getItem(dataKey);
+
+    if (cachedStatus && cachedData) {
+      setData(JSON.parse(cachedData));
+      setStatus(cachedStatus);
+      return;
+    }
+
+    if (window.__vnpay_processing) {
+      const timer = setTimeout(() => {
+        const s = sessionStorage.getItem(statusKey);
+        const d = sessionStorage.getItem(dataKey);
+        if (s && d) {
+          setData(JSON.parse(d));
+          setStatus(s);
+        } else {
+          setStatus("FAILED");
+        }
+      }, 300); // 300ms là đủ
+
+      return () => clearTimeout(timer);
+    }
+
+    // 🚀 LẦN ĐẦU TIÊN GỌI API
+    window.__vnpay_processing = true;
+
+    const payload = {};
+    params.forEach((v, k) => (payload[k] = v));
+
+    (async () => {
+      try {
+        const res = await userBookingPageAPI.paymentReturn(payload);
+
+        if (res.data?.status === "SUCCESS" && res.data?.data?.status === "SUCCESS") {
+          sessionStorage.setItem(dataKey, JSON.stringify(res.data.data.details));
+          sessionStorage.setItem(statusKey, "SUCCESS");
+          setData(res.data.data.details);
+          setStatus("SUCCESS");
+        } else {
+          sessionStorage.setItem(statusKey, "FAILED");
+          setStatus("FAILED");
+        }
+      } catch {
+        sessionStorage.setItem(statusKey, "FAILED");
+        setStatus("FAILED");
+      }
+    })();
   }, []);
 
-  if (!data) return null;
+  if (!status) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-gray-500">Đang xác minh thanh toán...</p>
+      </div>
+    );
+  }
 
-  const amount = formatCurrency(Number(data.vnp_Amount) / 100);
+  if (status === "FAILED") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+        <div className="w-full max-w-md rounded-xl bg-white p-6 text-center shadow-lg">
+          <XCircle className="mx-auto h-14 w-14 text-red-500" />
+          <h2 className="mt-3 text-xl font-bold text-gray-800">Thanh toán thất bại</h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Giao dịch không hợp lệ hoặc đã được xử lý trước đó
+          </p>
+          <a
+            href="/parkingReservation"
+            className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+          >
+            Quay lại đặt chỗ
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  const amount = formatCurrency(Number(data.vnp_Amount));
+
   const formatDate = (date) => {
     if (!date) return "";
-    const y = date.substring(0, 4);
-    const m = date.substring(4, 6);
-    const d = date.substring(6, 8);
-    const hh = date.substring(8, 10);
-    const mm = date.substring(10, 12);
-    const ss = date.substring(12, 14);
-    return `${d}/${m}/${y} ${hh}:${mm}:${ss}`;
+    return `${date.slice(6, 8)}/${date.slice(4, 6)}/${date.slice(
+      0,
+      4
+    )} ${date.slice(8, 10)}:${date.slice(10, 12)}:${date.slice(12, 14)}`;
   };
 
   const items = [
@@ -82,18 +162,28 @@ export default function ReturnPage() {
           ))}
         </div>
 
-        <div className="mt-6">
-          <a
-            href="http://localhost:3000/parkingReservation"
-            className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
-          >
-            Trở về trang đặt chỗ
-          </a>
-        </div>
+        {localStorage.getItem("accessToken") ? (
+          <div className="mt-6">
+            <a
+              href={PATH.DASHBOARD.ADMIN_HOME}
+              className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
+            >
+              Trở về trang chính
+            </a>
+          </div>
+        ) : (
+          <div className="mt-6">
+            <a
+              href="/parkingReservation"
+              className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
+            >
+              Trở về trang đặt chỗ
+            </a>
+          </div>
+        )}
 
         <p className="mt-4 text-center text-xs text-gray-500">
-          Backend cần xác minh chữ ký tại{" "}
-          <code className="rounded bg-gray-200 px-1">/api/v1/vnpay/return</code>
+          Backend đã xác minh chữ ký VNPay thành công
         </p>
       </div>
     </div>
