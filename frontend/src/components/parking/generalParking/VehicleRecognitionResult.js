@@ -14,13 +14,14 @@ export default function VehicleRecognitionResult({
   data,
   isOut,
   onRetake,
+  id,
   linkVideo,
 }) {
   const [isZoomed, setIsZoomed] = useState(false);
   const router = useRouter();
 
   const handlePayment = () => {
-    router.push(`${PATH.PARKING_RESERVATION.PAYMENT}?bookingId=${data?.id}&amount=${data?.fee}`);
+    router.push(`${PATH.PARKING_RESERVATION.PAYMENT}?bookingId=${id}&amount=${data?.fee}`);
   };
 
   return (

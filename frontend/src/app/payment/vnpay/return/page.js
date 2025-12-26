@@ -7,7 +7,7 @@ import { userBookingPageAPI } from "@/api/parking-lot/userBookingPageAPI";
 import PATH from "@/routes/PATH";
 
 export default function ReturnPage() {
-  const [status, setStatus] = useState(null); // SUCCESS | FAILED
+  const [status, setStatus] = useState(null); 
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -41,12 +41,11 @@ export default function ReturnPage() {
         } else {
           setStatus("FAILED");
         }
-      }, 300); // 300ms là đủ
+      }, 300); 
 
       return () => clearTimeout(timer);
     }
 
-    // 🚀 LẦN ĐẦU TIÊN GỌI API
     window.__vnpay_processing = true;
 
     const payload = {};
@@ -89,12 +88,25 @@ export default function ReturnPage() {
           <p className="mt-2 text-sm text-gray-500">
             Giao dịch không hợp lệ hoặc đã được xử lý trước đó
           </p>
-          <a
-            href="/parkingReservation"
-            className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
-          >
-            Quay lại đặt chỗ
-          </a>
+          {localStorage.getItem("accessToken") ? (
+            <div className="mt-6">
+              <a
+                href={PATH.DASHBOARD.ADMIN_HOME}
+                className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
+              >
+                Trở về trang chính
+              </a>
+            </div>
+          ) : (
+            <div className="mt-6">
+              <a
+                href="/parkingReservation"
+                className="block rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-700"
+              >
+                Trở về trang đặt chỗ
+              </a>
+            </div>
+          )}
         </div>
       </div>
     );

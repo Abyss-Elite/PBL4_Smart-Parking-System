@@ -40,6 +40,7 @@ export default function GateSurveillance() {
         time: data.car.checkOutTime,
         image: data.car.imageOutUrl,
         fee: data.fee,
+        id: data.car.id,
       });
     }
   );
@@ -130,6 +131,7 @@ export default function GateSurveillance() {
             isOut={true}
             data={currentMonitoredCarOut}
             onRetake={handleRetake}
+            id={currentMonitoredCarOut?.id}
           />
         </TabsContent>
       </Tabs>
