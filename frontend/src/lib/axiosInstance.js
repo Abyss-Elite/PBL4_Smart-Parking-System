@@ -38,6 +38,7 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    return Promise.reject(err);
   }
 );
 

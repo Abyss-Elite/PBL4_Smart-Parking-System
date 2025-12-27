@@ -7,28 +7,14 @@ import PATH from "@/routes/PATH";
 import { CarBookingPending } from "@/types/car";
 import { format } from "date-fns";
 
-export default function PendingBillPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default function PendingBillPage({ params }: PageProps) {
+  const { id } = React.use(params);
   const router = useRouter();
-  const mockBooking = {
-    customerName: "Nguyễn Văn A",
-    customerPhone: "0905123456",
-    total: 850000,
-    cars: [
-      {
-        slot: "A12",
-        plate: "43A-123.45",
-        mode: "Theo tuần",
-        weekStart: "Tuần 48 (25/11 - 01/12)",
-      },
-      {
-        slot: "B03",
-        plate: "43C-567.89",
-        mode: "Theo tháng",
-        month: "Tháng 12/2025",
-      },
-    ],
-  };
+
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState<{
     customerName: string;

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { addDays, format, lastDayOfMonth } from "date-fns";
+import { formatLicensePlate } from "@/utils/formatPlate";
 
 export default function BookingForm({ slot, bookingMode, onAddCar, booked, onSwitchToMonth }) {
   const [licensePlate, setLicensePlate] = useState("");
@@ -52,7 +53,7 @@ export default function BookingForm({ slot, bookingMode, onAddCar, booked, onSwi
     }
 
     const success = onAddCar({
-      licensePlate,
+      licensePlate: formatLicensePlate(licensePlate),
       startTimeBooking: start,
       endTimeBooking: end,
       mode: bookingMode,
@@ -140,7 +141,7 @@ export default function BookingForm({ slot, bookingMode, onAddCar, booked, onSwi
                 onClick={() => {
                   onSwitchToMonth();
                 }}
-                className="mt-1 font-semibold text-blue-700 underline hover:text-blue-900 cursor-pointer"
+                className="mt-1 cursor-pointer font-semibold text-blue-700 underline hover:text-blue-900"
               >
                 Nhấn vào đây để chuyển sang đặt tháng
               </button>

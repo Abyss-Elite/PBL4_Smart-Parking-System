@@ -27,3 +27,12 @@ export interface CarBookingPending {
     status: string;
   }
 }
+
+export interface Booking {
+  id: string;
+  code: string;
+  totalAmount: number;
+  status: string;
+  isPaid: boolean;
+  cars: any[];
+}

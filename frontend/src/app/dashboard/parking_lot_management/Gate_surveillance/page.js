@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSSE } from "@/utils/useSSE";
 import { carAPI } from "@/api/car/carAPI";
+import { da } from "date-fns/locale";
 
 export default function GateSurveillance() {
   const [currentMonitoredCarIn, setCurrentMonitoredCarIn] = useState(null);
@@ -41,6 +42,7 @@ export default function GateSurveillance() {
         image: data.car.imageOutUrl,
         fee: data.fee,
         id: data.car.id,
+        isPaid: data.car.isPaid,
       });
     }
   );
@@ -132,6 +134,7 @@ export default function GateSurveillance() {
             data={currentMonitoredCarOut}
             onRetake={handleRetake}
             id={currentMonitoredCarOut?.id}
+            isPaid={currentMonitoredCarOut?.isPaid}
           />
         </TabsContent>
       </Tabs>

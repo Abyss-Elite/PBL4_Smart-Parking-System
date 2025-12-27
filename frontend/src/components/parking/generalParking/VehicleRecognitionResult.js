@@ -15,6 +15,7 @@ export default function VehicleRecognitionResult({
   isOut,
   onRetake,
   id,
+  isPaid,
   linkVideo,
 }) {
   const [isZoomed, setIsZoomed] = useState(false);
@@ -96,7 +97,7 @@ export default function VehicleRecognitionResult({
             >
               {isOut === false ? "Vào bãi" : "Ra khỏi bãi"}
             </span>
-            {isOut === true && (
+            {isPaid === false && (
               <>
                 <div>
                   <span>Tổng tiền:</span>
