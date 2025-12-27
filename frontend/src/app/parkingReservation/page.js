@@ -114,7 +114,13 @@ export default function SlotPage() {
     if (isOverlap) return false; // báo cho BookingForm
 
     // Thêm booking mới
-    const spot = parkingSpots.find((p) => p.name === selectedSlot);
+    const spot = dataSlot.find((s) => s.name === selectedSlot);
+
+    if (!spot) {
+      console.error("Không tìm thấy spot cho slot:", selectedSlot);
+      return false;
+    }
+
     const newCar = {
       ...car,
       spotId: spot.id,

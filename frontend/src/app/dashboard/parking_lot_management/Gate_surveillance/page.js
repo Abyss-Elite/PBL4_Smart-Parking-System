@@ -15,7 +15,7 @@ export default function GateSurveillance() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useSSE(
-    "http://192.168.100.252:8083/api/parkingLot/currentPlate/checkIn/stream",
+    "http://192.168.43.23:8083/api/parkingLot/currentPlate/checkIn/stream",
     "check-in-plate",
     (data) => {
       if (data?.status === "BOOKING_NOT_STARTED") {
@@ -33,7 +33,7 @@ export default function GateSurveillance() {
   );
 
   useSSE(
-    "http://192.168.100.252:8083/api/parkingLot/currentPlate/checkOut/stream",
+    "http://192.168.43.23:8083/api/parkingLot/currentPlate/checkOut/stream",
     "check-out-plate",
     (data) => {
       setCurrentMonitoredCarOut({

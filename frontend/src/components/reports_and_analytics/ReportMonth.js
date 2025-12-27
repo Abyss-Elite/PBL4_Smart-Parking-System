@@ -1,130 +1,3 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-// import { revenueAPI } from "@/api/revenue/revenueAPI";
-
-// export function ReportMonth({ initialStartDate }) {
-//   const yearNow = new Date().getFullYear();
-//   const [data, setData] = useState([]);
-//   const [selectedMonth, setSelectedMonth] = useState("");
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchRevenueMonth = async () => {
-//       try {
-//         const res = await revenueAPI.revenueMonth(yearNow);
-//         const list = res.data || [];
-//         setData(list);
-
-//         if (list.length > 0) {
-//           setSelectedMonth(list[0].month);
-//         }
-//       } catch (err) {
-//         console.error("Lỗi fetch revenue month:", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchRevenueMonth();
-//   }, [yearNow]);
-
-//   const currentItem = data.find((d) => d.month === selectedMonth);
-
-//   const isCurrentMonth = (month) => {
-//     const [m, y] = month.split("/");
-//     const now = new Date();
-//     return now.getMonth() + 1 === Number(m) && now.getFullYear() === Number(y);
-//   };
-
-//   const handleElectricityChange = (value) => {
-//     const newData = data.map((item) =>
-//       item.month === selectedMonth ? { ...item, electricity: value } : item
-//     );
-//     setData(newData);
-//   };
-
-//   if (loading) {
-//     return (
-//       <Card className="rounded-2xl border p-6 shadow-sm">
-//         <p className="text-gray-500">Đang tải dữ liệu...</p>
-//       </Card>
-//     );
-//   }
-
-//   if (data.length === 0) {
-//     return (
-//       <Card className="rounded-2xl border p-6 shadow-sm">
-//         <p className="text-gray-500">Không có dữ liệu tháng nào.</p>
-//       </Card>
-//     );
-//   }
-
-//   return (
-//     <Card className="rounded-2xl border shadow-sm">
-//       <CardHeader>
-//         <CardTitle>Báo cáo theo tháng</CardTitle>
-//       </CardHeader>
-
-//       <CardContent className="space-y-6">
-//         {/* Chọn tháng */}
-//         <div className="flex items-center gap-4">
-//           <label htmlFor="monthSelect" className="font-medium text-gray-700">
-//             Chọn tháng:
-//           </label>
-//           <select
-//             id="monthSelect"
-//             value={selectedMonth}
-//             onChange={(e) => setSelectedMonth(e.target.value)}
-//             className="rounded-lg border border-gray-300 bg-white p-2 shadow-sm focus:outline-none"
-//           >
-//             {data.map((item) => (
-//               <option key={item.month} value={item.month}>
-//                 {item.month}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-
-//         {currentItem && (
-//           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-//             <Card className="rounded-xl border bg-gray-50 p-4 shadow-sm">
-//               <p>
-//                 <span className="font-semibold">Tổng lượt xe:</span> {currentItem.total}
-//               </p>
-
-//               <p>
-//                 <span className="font-semibold">Tiền phí thu vào:</span>{" "}
-//                 {currentItem.fee.toLocaleString()} đ
-//               </p>
-
-//               <p className="flex items-center gap-2">
-//                 <span className="font-semibold">Tiền điện:</span>
-//                 {isCurrentMonth(currentItem.month) ? (
-//                   <input
-//                     type="number"
-//                     value={currentItem.electricity}
-//                     onChange={(e) => handleElectricityChange(Number(e.target.value))}
-//                     className="w-32 rounded-md border p-1 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-//                   />
-//                 ) : (
-//                   <span>{currentItem.electricity.toLocaleString()} đ</span>
-//                 )}
-//               </p>
-
-//               <p>
-//                 <span className="font-semibold">Doanh thu thực:</span>{" "}
-//                 {(currentItem.fee - currentItem.electricity).toLocaleString()} đ
-//               </p>
-//             </Card>
-//           </div>
-//         )}
-//       </CardContent>
-//     </Card>
-//   );
-// }
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -152,10 +25,6 @@ export function ReportMonth({ initialStartDate }) {
       try {
         const res = await revenueAPI.revenueMonth(yearNow);
         let list = res.data || [];
-
-        // ─────────────────────────────────────────────
-        //  🔥 LỌC THÁNG TỪ initialStartDate → HIỆN TẠI
-        // ─────────────────────────────────────────────
         list = list.filter((item) => {
           const [m, y] = item.month.split("/").map(Number);
 
@@ -242,10 +111,6 @@ export function ReportMonth({ initialStartDate }) {
         {currentItem && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Card className="rounded-xl border bg-gray-50 p-4 shadow-sm">
-              <p>
-                <span className="font-semibold">Tổng lượt xe:</span> {currentItem.total}
-              </p>
-
               <p>
                 <span className="font-semibold">Tiền phí thu vào:</span>{" "}
                 {currentItem.fee.toLocaleString()} đ
